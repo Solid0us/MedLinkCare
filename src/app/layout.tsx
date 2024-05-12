@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import TopNavBar from "@/components/TopNavBar";
+import AttributionsFooter from "@/components/AttributionsFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <TopNavBar />
         {children}
+        <AttributionsFooter />
       </body>
-      <a href="https://www.freepik.com/free-vector/doctors-personalized-prescriptive-analytics_11667703.htm#fromView=search&page=3&position=27&uuid=c2a7f059-5fed-4ece-a217-92e9507dce02">
-        Image by vectorjuice
-      </a>{" "}
-      on Freepik
     </html>
   );
 }
