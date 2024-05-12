@@ -26,9 +26,9 @@ const AttributionsFooter = () => {
         <AccordionTrigger className="p-1">Image Attributions</AccordionTrigger>
         <AccordionContent className="p-2">
           <ul className="list-disc">
-            {attributionList.map((item) => {
+            {attributionList.map((item, idx) => {
               return (
-                <li>
+                <li key={idx}>
                   <Link className="underline" href={item.href}>
                     {item.hrefString}
                   </Link>{" "}
