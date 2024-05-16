@@ -14,7 +14,7 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model User {
+model Users {
   id        String @id @default(uuid())
   firstName String
   lastName  String
