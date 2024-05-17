@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Button from "./Button";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 const TopNavBar = () => {
   const { data: session, status } = useSession();

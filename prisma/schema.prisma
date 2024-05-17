@@ -15,9 +15,26 @@ datasource db {
 }
 
 model Users {
-  id        String @id @default(uuid())
+  id        String      @id @default(uuid())
   firstName String
   lastName  String
-  email     String @unique
+  email     String      @unique
   password  String
+  UserRoles UserRoles[]
+}
+
+model UserRoles {
+  id      String @id @default(uuid())
+  users   Users  @relation(fields: [usersId], references: [id])
+  usersId String
+  roles   Roles  @relation(fields: [rolesId], references: [id])
+  rolesId String
+
+  @@unique(fields: [usersId, rolesId], map: "userRoleCompositeKey")
+}
+
+model Roles {
+  id        String      @id @default(uuid())
+  role      String      @unique
+  UserRoles UserRoles[]
 }
