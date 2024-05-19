@@ -1,13 +1,11 @@
-"use client";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import WelcomeMessage from "@/app/(home)/_components/WelcomeMessage";
 
 const Dashboard = () => {
-  const { data: session } = useSession();
-  if (!session?.user) {
-    //  redirect("/auth/login");
-  }
-  return <div>hi</div>;
+  return (
+    <div>
+      <WelcomeMessage />
+    </div>
+  );
 };
 
 export default Dashboard;
