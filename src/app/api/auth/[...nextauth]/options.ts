@@ -2,7 +2,11 @@ import { prisma } from "@/db/prisma";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
+
 export const options: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -11,6 +15,16 @@ export const options: NextAuthOptions = {
           label: "Email",
           type: "text",
           placeholder: "email",
+        },
+        firstName: {
+          label: "First Name",
+          type: "text",
+          placeholder: "firstName",
+        },
+        lastName: {
+          label: "Last Name",
+          type: "text",
+          placeholder: "lastName",
         },
         password: {
           label: "Password:",
@@ -26,6 +40,7 @@ export const options: NextAuthOptions = {
         });
         if (user && credentials?.password) {
           if (await bcrypt.compare(credentials.password, user.password)) {
+            user.password = "";
             return user;
           }
           return null;
@@ -38,5 +53,18 @@ export const options: NextAuthOptions = {
   // Can create own signin/signup pages
   pages: {
     signIn: "/auth/signin",
+  },
+  callbacks: {
+    async jwt({ token, user, session }) {
+      if (user) {
+        (token.firstName = user.firstName), (token.lastName = user.lastName);
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
+      return session;
+    },
   },
 };
