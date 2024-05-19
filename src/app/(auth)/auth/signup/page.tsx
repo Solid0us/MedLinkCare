@@ -33,7 +33,7 @@ const SignUp = () => {
     if (results?.error) {
       alert("Something went wrong signing you in.");
     }
-    router.push("/");
+    router.push("/dashboard");
   };
 
   useEffect(() => {
