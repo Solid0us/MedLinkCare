@@ -3,10 +3,10 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import AuthFormTemplate from "../_components/AuthFormTemplate";
 import AuthFormInput from "../_components/AuthFormInput";
 import { SignupUserForm, signupUser } from "../_actions/signup-action";
-import { useFormState, useFormStatus } from "react-dom";
-import { redirect } from "next/navigation";
+import { useFormState } from "react-dom";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import SubmitButton from "../_components/SubmitButton";
 
 const SignUp = () => {
   const router = useRouter();
@@ -87,9 +87,8 @@ const SignUp = () => {
           label="Confirm Password"
           errorMessage={formState.errors?.confirmPassword}
         />
-        <button className="p-3 rounded-lg bg-violet-600 text-white">
-          Signup
-        </button>
+
+        <SubmitButton />
       </form>
     </AuthFormTemplate>
   );
