@@ -4,6 +4,7 @@ import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import HomeIcon from "@mui/icons-material/Home";
+import Link from "next/link";
 
 interface DashboardSideBarProps {
   children: any;
@@ -19,15 +20,7 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
           expand ? "w-80" : "w-20"
         }  max-w-96 duration-500 `}
       >
-        <div className="flex flex-row gap-x-10">
-          <h1
-            className={`bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text text-nowrap ${
-              !expand && "hidden"
-            } `}
-          >
-            MedLink Care
-          </h1>
-
+        <div className="flex flex-row gap-x-5 p-3">
           <button
             className="right-0 text-white bg-purple-800 hover:bg-purple-700 rounded-full duration-200"
             onClick={() => setExpand((prevState) => !prevState)}
@@ -36,8 +29,18 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
               className={`${expand ? "rotate-180" : "rotate-0"}`}
             />
           </button>
+          <h1
+            className={`bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text text-nowrap ${
+              !expand && "hidden"
+            } `}
+          >
+            MedLink Care
+          </h1>
         </div>
-        <div className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200">
+        <Link
+          href="/dashboard/main"
+          className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200"
+        >
           <button>
             <HomeIcon />
           </button>
@@ -48,8 +51,11 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
           >
             Main
           </label>
-        </div>
-        <div className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200">
+        </Link>
+        <Link
+          href="/dashboard/appointments"
+          className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200"
+        >
           <button>
             <EventNoteIcon />
           </button>
@@ -60,7 +66,7 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
           >
             Appointments
           </label>
-        </div>
+        </Link>
       </div>
       <div className={`${expand ? "ml-80" : "ml-20"} duration-500 p-4 `}>
         {children}

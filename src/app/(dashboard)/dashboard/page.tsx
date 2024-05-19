@@ -1,11 +1,7 @@
-import WelcomeMessage from "@/app/(home)/_components/WelcomeMessage";
+import { redirect } from "next/navigation";
 
 const Dashboard = () => {
-  return (
-    <div>
-      <WelcomeMessage />
-    </div>
-  );
+  redirect("/dashboard/main");
 };
 
 export default Dashboard;
