@@ -123,6 +123,19 @@ export const signupUser = async (
       password: hashedPassword,
     },
   });
+  const role = await prisma.roles.findUnique({
+    where: {
+      role: "client",
+    },
+  });
+  if (role) {
+    const createdRole = await prisma.userRoles.create({
+      data: {
+        usersId: user.id,
+        rolesId: role.id,
+      },
+    });
+  }
   return {
     errors: undefined,
     message: "success",

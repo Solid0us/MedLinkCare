@@ -37,6 +37,13 @@ export const options: NextAuthOptions = {
           where: {
             email: credentials?.email,
           },
+          include: {
+            UserRoles: {
+              include: {
+                roles: true,
+              },
+            },
+          },
         });
         if (user && credentials?.password) {
           if (await bcrypt.compare(credentials.password, user.password)) {
@@ -58,12 +65,18 @@ export const options: NextAuthOptions = {
     async jwt({ token, user, session }) {
       if (user) {
         (token.firstName = user.firstName), (token.lastName = user.lastName);
+        let roles = [];
+        for (let i = 0; i < user.UserRoles.length; i++) {
+          roles.push(user.UserRoles[i].roles.role);
+        }
+        token.roles = roles;
       }
       return token;
     },
     async session({ session, token, user }) {
       session.user.firstName = token.firstName;
       session.user.lastName = token.lastName;
+      session.user.roles = token.roles;
       return session;
     },
   },
