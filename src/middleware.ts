@@ -6,7 +6,7 @@ export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     const { token } = req.nextauth;
     const { pathname } = req.nextUrl;
-    // if (!token?.roles.includes("admin") && pathname === "/dashboard") {
+    // if (!token?.roles.includes("admin") && pathname.startsWith("/dashboard")) {
     //   return NextResponse.rewrite(new URL("/", req.url));
     // }
   },
@@ -17,4 +17,4 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/auth/login", "/dashboard"] };
+export const config = { matcher: ["/auth/login", "/dashboard/:path*"] };

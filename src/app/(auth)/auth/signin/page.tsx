@@ -20,7 +20,7 @@ const SignIn = () => {
     if (results?.error) {
       alert("Invalid username or passowrd");
     } else {
-      router.push("/dashboard");
+      router.push("/dashboard/main");
     }
   };
   return (

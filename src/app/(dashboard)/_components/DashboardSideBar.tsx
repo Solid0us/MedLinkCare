@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import HomeIcon from "@mui/icons-material/Home";
-import Link from "next/link";
+import DashboardLogoutButton from "./DashboardLogoutButton";
+import DashboardSideBarItem from "./DashboardSideBarItem";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface DashboardSideBarProps {
   children: any;
@@ -16,13 +16,19 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
   return (
     <>
       <div
-        className={`pl-5 pt-2 pr-5 flex flex-col fixed left-0 top-0 items-start h-full gap-y-3 bg-violet-300 border-r-2 border-violet-500 overflow-hidden ${
-          expand ? "w-80" : "w-20"
+        className="md:invisible absolute top-0 left-0 m-4 hover:bg-violet-200 rounded-lg"
+        onClick={() => setExpand((prevState) => !prevState)}
+      >
+        <MenuIcon fontSize="large" className=" text-violet-600 " />
+      </div>
+      <div
+        className={`md:pl-5 pt-2 md:pr-5 flex flex-col fixed left-0 top-0 items-start h-full gap-y-3 bg-violet-300 border-r-2 border-violet-500 overflow-hidden ${
+          expand ? "visible w-2/3 md:w-80" : "invisible md:visible w-0 md:w-20"
         }  max-w-96 duration-500 `}
       >
-        <div className="flex flex-row gap-x-5 p-3">
+        <div className="flex flex-row  gap-x-5 p-3">
           <button
-            className="right-0 text-white bg-purple-800 hover:bg-purple-700 rounded-full duration-200"
+            className="visible right-0  text-white bg-purple-800 hover:bg-purple-700 rounded-full duration-200"
             onClick={() => setExpand((prevState) => !prevState)}
           >
             <KeyboardArrowRightIcon
@@ -37,38 +43,29 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
             MedLink Care
           </h1>
         </div>
-        <Link
+        <DashboardSideBarItem
           href="/dashboard/main"
-          className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200"
-        >
-          <button>
-            <HomeIcon />
-          </button>
-          <label
-            className={`${
-              !expand ? "hidden" : "opacity-100"
-            } duration-100 hover:cursor-pointer text-nowrap`}
-          >
-            Main
-          </label>
-        </Link>
-        <Link
+          label="Main"
+          expand={expand}
+        />
+        <DashboardSideBarItem
           href="/dashboard/appointments"
-          className="w-full flex flex-row gap-x-5 hover:bg-white hover:cursor-pointer rounded-lg p-3 duration-200"
-        >
-          <button>
-            <EventNoteIcon />
-          </button>
-          <label
-            className={`${
-              !expand ? "hidden" : "opacity-100"
-            } duration-100 hover:cursor-pointer text-nowrap`}
-          >
-            Appointments
-          </label>
-        </Link>
+          label="Appointments"
+          expand={expand}
+        />
+        <DashboardSideBarItem
+          href="/dashboard/inbox"
+          label="Inbox"
+          expand={expand}
+        />
+
+        <DashboardLogoutButton expand={expand} />
       </div>
-      <div className={`${expand ? "ml-80" : "ml-20"} duration-500 p-4 `}>
+      <div
+        className={`${
+          expand ? "ml-0 md:ml-80" : "ml-0 md:ml-20"
+        } duration-500 pl-4 pr-4 pt-14 `}
+      >
         {children}
       </div>
     </>
