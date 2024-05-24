@@ -25,7 +25,7 @@ export default function Home() {
               healthcare. Simply sign up and start browsing verified health care
               providers near you!
             </p>
-            <Link href="/signup">
+            <Link href="/auth/signup">
               <Button
                 className="bg-violet-500 text-white"
                 text="Get Started Today"

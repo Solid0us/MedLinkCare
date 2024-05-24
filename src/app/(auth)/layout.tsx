@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import TopNavBar from "@/components/TopNavBar";
 import SessionWrapper from "@/context/SessionWrapper";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionWrapper>
-          <TopNavBar />
+          <Link href="/" className="mt-auto mb-auto text-2xl">
+            <h1 className=" bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text ">
+              MedLink Care
+            </h1>
+          </Link>
           {children}
         </SessionWrapper>
       </body>
