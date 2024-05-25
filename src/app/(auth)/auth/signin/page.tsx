@@ -48,7 +48,7 @@ const SignIn = () => {
         />
         <SubmitButton onClick={onSubmit} text="Log in"></SubmitButton>
         <p className="text-sm text-center pt-5 pb-5">
-          Don't have an account?
+          Don&apos;t have an account?
           <Link href="/auth/signup">
             <span className="text-violet-800 font-bold"> Sign up here.</span>
           </Link>
