@@ -34,11 +34,19 @@ const TopNavBar = () => {
                   </Link>
                 </>
               ) : (
-                <Button
-                  className="bg-white text-violet-900 font-bold"
-                  text="Logout"
-                  onClick={() => signOut()}
-                />
+                <>
+                  <Link href="/dashboard">
+                    <Button
+                      className="bg-white text-violet-900 font-bold"
+                      text="Dashboard"
+                    />
+                  </Link>
+                  <Button
+                    className="bg-white text-violet-900 font-bold"
+                    text="Logout"
+                    onClick={() => signOut()}
+                  />
+                </>
               )}
             </>
           )}

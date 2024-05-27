@@ -1,13 +1,11 @@
 import Button from "@/components/Button";
 import Image from "next/image";
 import Link from "next/link";
-import WelcomeMessage from "./_components/WelcomeMessage";
 
 export default function Home() {
   return (
     <main className="h-screen">
       <div className="w-full">
-        <WelcomeMessage />
         <div className="flex flex-col items-center xl:flex-row xl:items-start justify-between m-10 border border-blue-700 rounded-lg gap-y-5  p-5">
           <div className="relative w-full max-w-3xl flex flex-col items-center">
             <Image
@@ -27,7 +25,7 @@ export default function Home() {
               healthcare. Simply sign up and start browsing verified health care
               providers near you!
             </p>
-            <Link href="/signup">
+            <Link href="/auth/signup">
               <Button
                 className="bg-violet-500 text-white"
                 text="Get Started Today"

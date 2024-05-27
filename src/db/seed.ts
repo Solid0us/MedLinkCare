@@ -1,17 +1,10 @@
 import { prisma } from "./prisma";
+import seedRoles from "./seeds/roleSeeds";
+import seedUsers from "./seeds/userSeeds";
 
 const seed = async () => {
-  const createdRoles = await prisma.roles.createMany({
-    data: [
-      { role: "admin" },
-      { role: "client" },
-      {
-        role: "healthcareProvider",
-      },
-    ],
-    skipDuplicates: true,
-  });
-  console.log(`Roles seeded: ${createdRoles.count}`);
+  await seedRoles();
+  await seedUsers()
 };
 
 seed()
