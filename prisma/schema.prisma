@@ -21,6 +21,8 @@ model Users {
   email     String      @unique
   password  String
   UserRoles UserRoles[]
+  ClientAppointments Appointments[] @relation("clientAppointments")
+  ProviderAppointments Appointments[] @relation("providerAppointments")
 }
 
 model UserRoles {
@@ -37,4 +39,14 @@ model Roles {
   id        String      @id @default(uuid())
   role      String      @unique
   UserRoles UserRoles[]
+}
+
+model Appointments {
+  id String @id @default(uuid())
+  clients Users @relation("clientAppointments",fields: [clientsId], references: [id])
+  clientsId String
+  providers Users @relation("providerAppointments",fields: [providersId], references: [id])
+  providersId String
+  startDate DateTime
+  endDate DateTime
 }

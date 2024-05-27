@@ -5,8 +5,6 @@ import seedUsers from "./seeds/userSeeds";
 const seed = async () => {
   await seedRoles();
   await seedUsers()
-  const userRoles = await prisma.userRoles.findMany()
-  console.log(userRoles)
 };
 
 seed()

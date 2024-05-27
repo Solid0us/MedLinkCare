@@ -17,7 +17,7 @@ const seedUsers = async() => {
             id: "609d439f-5ba1-430e-86cc-a1611bda416b",
             firstName: "Colleen",
             lastName: "Fischer",
-            email: "colleanF@medlink.com",
+            email: "colleenF@medlink.com",
             password: hashedPW2
         }
     ]
