@@ -3,7 +3,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
 
-export const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -64,7 +64,7 @@ export const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, session }) {
       if (user) {
-        (token.firstName = user.firstName), (token.lastName = user.lastName);
+        (token.firstName = user.firstName), (token.lastName = user.lastName), token.id = user.id
         let roles = [];
         for (let i = 0; i < user.UserRoles.length; i++) {
           roles.push(user.UserRoles[i].roles.role);
@@ -77,6 +77,7 @@ export const options: NextAuthOptions = {
       session.user.firstName = token.firstName;
       session.user.lastName = token.lastName;
       session.user.roles = token.roles;
+      session.user.id = token.id
       return session;
     },
   },
