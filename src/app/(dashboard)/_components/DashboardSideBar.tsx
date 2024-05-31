@@ -24,9 +24,9 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
       <div
         className={`md:pl-5 pt-2 md:pr-5 flex flex-col fixed left-0 top-0 items-start h-full gap-y-3 bg-violet-300 border-r-2 border-violet-500 overflow-hidden ${
           expand ? "visible w-2/3 md:w-80" : "invisible md:visible w-0 md:w-20"
-        }  max-w-96 duration-500 `}
+        }  max-w-96 duration-500 z-50`}
       >
-        <div className="flex flex-row  gap-x-5 p-3">
+        <div className="flex flex-row z-50 gap-x-5 p-3">
           <button
             className="visible right-0  text-white bg-purple-800 hover:bg-purple-700 rounded-full duration-200"
             onClick={() => setExpand((prevState) => !prevState)}

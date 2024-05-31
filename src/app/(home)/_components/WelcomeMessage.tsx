@@ -1,16 +1,14 @@
-"use client";
-import { useSession } from "next-auth/react";
+import AnimateTitleLeftToRight from "@/animations/AnimateTitleLeftToRight";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
-const WelcomeMessage = () => {
-  const { data: session, status } = useSession();
-  console.log(session);
-  if (status !== "loading" && session?.user) {
-    return (
-      <h1>
-        Welcome {session.user.firstName} {session.user.lastName}
-      </h1>
-    );
-  }
+const WelcomeMessage = async () => {
+  const session = await getServerSession(authOptions);
+  return (
+    <AnimateTitleLeftToRight>
+      Welcome {session?.user.firstName} {session?.user.lastName}
+    </AnimateTitleLeftToRight>
+  );
 };
 
 export default WelcomeMessage;
