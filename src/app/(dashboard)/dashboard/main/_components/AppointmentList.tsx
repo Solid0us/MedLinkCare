@@ -9,6 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AnimateCardScaleUp from "@/animations/AnimateCardScaleUp";
+import Link from "next/link";
+import HomeDashboardCardBody from "./HomeDashboardCardBody";
 type Appointment = {
   id: string;
   clientsId: string;
@@ -37,7 +39,7 @@ const AppointmentList = async () => {
   return (
     <>
       <AnimateCardScaleUp>
-        <Card className="bg-violet-300 max-w-96">
+        <HomeDashboardCardBody>
           <CardHeader className="font-bold">Upcoming Appointments</CardHeader>
           <CardContent>
             {appointments.length > 0 ? (
@@ -59,10 +61,18 @@ const AppointmentList = async () => {
                 );
               })
             ) : (
-              <p>No Appointments</p>
+              <>
+                <p>No upcoming appointments.</p>
+                <Link href="/dashboard/appointments">
+                  <span className="text-indigo-600 underline hover:text-indigo-500 font-bold">
+                    <br />
+                    Get Care Now!
+                  </span>
+                </Link>
+              </>
             )}
           </CardContent>
-        </Card>
+        </HomeDashboardCardBody>
       </AnimateCardScaleUp>
     </>
   );

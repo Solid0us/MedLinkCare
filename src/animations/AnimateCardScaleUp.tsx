@@ -12,6 +12,7 @@ const AnimateCardScaleUp = ({ children }: AnimateCardScaleUpProps) => {
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.25 }}
+      whileHover={{ scale: 1.05 }}
     >
       {children}
     </motion.div>

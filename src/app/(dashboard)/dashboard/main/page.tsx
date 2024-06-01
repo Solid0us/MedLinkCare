@@ -1,11 +1,13 @@
 import WelcomeMessage from "@/app/(home)/_components/WelcomeMessage";
 import AppointmentList from "./_components/AppointmentList";
+import InboxNotification from "./_components/InboxNotification";
 
 const DashboardMain = () => {
   return (
-    <div className="w-full relative z-0">
+    <div className="flex flex-col w-full relative gap-y-5">
       <WelcomeMessage />
       <AppointmentList />
+      <InboxNotification />
     </div>
   );
 };
