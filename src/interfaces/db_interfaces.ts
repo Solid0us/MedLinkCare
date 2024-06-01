@@ -4,9 +4,22 @@ export interface Appointment {
   providersId: string;
   startDate: Date;
   endDate: Date;
-  providers: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+}
+
+export interface Users {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface UserRoles {
+  id: string;
+  usersId: string;
+  rolesId: string;
+}
+
+export interface Roles {
+  id: string;
+  role: string;
 }

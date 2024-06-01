@@ -1,13 +1,17 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { Appointment } from "@/interfaces/db_interfaces";
+import { Appointment, Users } from "@/interfaces/db_interfaces";
+
+interface HasAppointmentsAndUsers extends Appointment {
+  providers: Users;
+}
 
 const getAppointments = async (id: string) => {
   const res = await fetch(
     `${process.env.NEXT_BASE_URL}/api/appointments?clientId=${id}&providers=true`
   );
-  const data: Appointment[] = (await res.json()).data;
+  const data: HasAppointmentsAndUsers[] = (await res.json()).data;
   return data;
 };
 
