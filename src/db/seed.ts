@@ -1,10 +1,14 @@
 import { prisma } from "./prisma";
+import seedDaysOfWeek from "./seeds/dayOfWeekSeeds";
 import seedRoles from "./seeds/roleSeeds";
+import seedTimeSlots from "./seeds/timeIntervalSeeds";
 import seedUsers from "./seeds/userSeeds";
 
 const seed = async () => {
   await seedRoles();
-  await seedUsers()
+  await seedUsers();
+  await seedTimeSlots();
+  await seedDaysOfWeek();
 };
 
 seed()

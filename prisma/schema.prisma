@@ -23,6 +23,7 @@ model Users {
   UserRoles UserRoles[]
   ClientAppointments Appointments[] @relation("clientAppointments")
   ProviderAppointments Appointments[] @relation("providerAppointments")
+  userAvailabilityTimes UserAvailabilityTimes[]
 }
 
 model UserRoles {
@@ -49,4 +50,28 @@ model Appointments {
   providersId String
   startDate DateTime
   endDate DateTime
+}
+
+model UserAvailabilityTimes {
+  id String @id @default(uuid())
+  users Users @relation(fields: [usersId], references: [id])
+  usersId String
+  startTimeUtc TimeSlots @relation("startTimeUtc", fields:[startTimeId], references: [id])
+  startTimeId Int
+  endTimeUtc TimeSlots @relation("endTimeUtc", fields:[endTimeId], references: [id])
+  endTimeId Int
+  DayOfWeek DayOfWeek @relation(fields: [dayOfWeekUtc], references: [dayOfWeek])
+  dayOfWeekUtc Int
+}
+
+model DayOfWeek {
+  dayOfWeek Int @id @db.SmallInt
+  userAvailabilityTimes UserAvailabilityTimes[]
+}
+
+model TimeSlots {
+  id Int @id @default(autoincrement())
+  timeUTC DateTime @db.Time() @unique
+  UserAvailabilityStartTime UserAvailabilityTimes[] @relation("startTimeUtc")
+  UserAvailabilityEndTime UserAvailabilityTimes[] @relation("endTimeUtc")
 }
