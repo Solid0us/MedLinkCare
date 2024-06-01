@@ -1,10 +1,9 @@
-
-
 const DashboardAppointments = () => {
-  return <>
-
-  
-  </>
+  return (
+    <>
+      <div>AppointmentsPage</div>
+    </>
+  );
 };
 
 export default DashboardAppointments;
