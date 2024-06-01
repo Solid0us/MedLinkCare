@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "auto";
 
 interface DetermineTimeOfDayGreetingProps {
   name: string | undefined;
