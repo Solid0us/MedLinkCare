@@ -1,16 +1,17 @@
 import AnimateCardScaleUp from "@/animations/AnimateCardScaleUp";
+import React from "react";
 import HomeDashboardCardBody from "./HomeDashboardCardBody";
 import { CardContent, CardHeader } from "@/components/ui/card";
 
-const InboxNotification = () => {
+const BillingCard = () => {
   return (
     <AnimateCardScaleUp>
       <HomeDashboardCardBody>
-        <CardHeader className="font-bold">Messages</CardHeader>
-        <CardContent>Message by ... X Hours ago</CardContent>
+        <CardHeader className="font-bold">Outstanding Balance</CardHeader>
+        <CardContent>Display Total Pending Balance Here</CardContent>
       </HomeDashboardCardBody>
     </AnimateCardScaleUp>
   );
 };
 
-export default InboxNotification;
+export default BillingCard;

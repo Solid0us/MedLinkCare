@@ -1,6 +1,7 @@
 import WelcomeMessage from "@/app/(home)/_components/WelcomeMessage";
 import AppointmentList from "./_components/AppointmentList";
 import InboxNotification from "./_components/InboxNotification";
+import BillingCard from "./_components/BillingCard";
 
 const DashboardMain = () => {
   return (
@@ -8,6 +9,7 @@ const DashboardMain = () => {
       <WelcomeMessage />
       <AppointmentList />
       <InboxNotification />
+      <BillingCard />
     </div>
   );
 };

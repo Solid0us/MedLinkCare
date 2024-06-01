@@ -58,6 +58,11 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
           label="Inbox"
           expand={expand}
         />
+        <DashboardSideBarItem
+          href="/dashboard/billing"
+          label="Payments"
+          expand={expand}
+        />
 
         <DashboardLogoutButton expand={expand} />
       </div>
