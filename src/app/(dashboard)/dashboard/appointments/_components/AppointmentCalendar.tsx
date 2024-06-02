@@ -10,9 +10,8 @@ const AppointmentCalendar = () => {
         mode="single"
         selected={date}
         onSelect={setDate}
-        className="rounded-md border"
+        className="rounded-md border w-fit"
       />
-      <p>{date?.toLocaleString()}</p>
     </>
   );
 };

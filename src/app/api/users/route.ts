@@ -1,4 +1,5 @@
 import { prisma } from "@/db/prisma";
+import { Prisma } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 
 interface HasUsers {
@@ -8,8 +9,23 @@ interface HasUsers {
   password: string;
 }
 
-export const GET = async () => {
-  const users = await prisma.users.findMany({});
+export const GET = async (req: NextRequest) => {
+  let whereOptions: Prisma.UsersWhereInput = {
+    UserRoles: {
+      some: {
+        roles: { role: req.nextUrl.searchParams.get("role") ?? undefined },
+      },
+    },
+  };
+  const users = await prisma.users.findMany({
+    where: whereOptions,
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+    },
+  });
   return NextResponse.json({
     status: "success",
     data: users,

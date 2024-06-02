@@ -15,28 +15,26 @@ const getAppointments = async (id: string) => {
   return data;
 };
 
-const AppointmentList = async () => {
+const UpcomingAppointment = async () => {
   const session = await getServerSession(authOptions);
   const appointments = await getAppointments(session?.user.id ?? "");
 
   return (
     <>
       {appointments.length > 0 ? (
-        appointments.map((appointment, idx) => {
-          return (
-            <>
-              <p>Appointment {idx + 1}</p>
-              <ul className="list-disc p-3">
-                <li>{new Date(appointment.startDate).toLocaleString()}</li>
-                <li>{new Date(appointment.endDate).toLocaleString()}</li>
-                <li>
-                  {appointment.providers.firstName}{" "}
-                  {appointment.providers.lastName}
-                </li>
-              </ul>
-            </>
-          );
-        })
+        <>
+          <p>Next Appointment:</p>
+          <ul className="list-disc p-3">
+            <li>
+              Start: {new Date(appointments[0].startDate).toLocaleString()}
+            </li>
+            <li>End: {new Date(appointments[0].endDate).toLocaleString()}</li>
+            <li>
+              {appointments[0].providers.firstName}{" "}
+              {appointments[0].providers.lastName}
+            </li>
+          </ul>
+        </>
       ) : (
         <>
           <p>No upcoming appointments.</p>
@@ -52,4 +50,4 @@ const AppointmentList = async () => {
   );
 };
 
-export default AppointmentList;
+export default UpcomingAppointment;

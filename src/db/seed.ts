@@ -6,9 +6,9 @@ import seedUsers from "./seeds/userSeeds";
 
 const seed = async () => {
   await seedRoles();
-  await seedUsers();
   await seedTimeSlots();
   await seedDaysOfWeek();
+  await seedUsers();
 };
 
 seed()
