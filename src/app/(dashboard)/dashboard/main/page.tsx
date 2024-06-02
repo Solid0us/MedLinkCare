@@ -1,4 +1,4 @@
-import WelcomeMessage from "@/app/(home)/_components/WelcomeMessage";
+import WelcomeMessage from "@/app/(dashboard)/_components/WelcomeMessage";
 import InboxNotification from "./_components/InboxNotification";
 import BillingCard from "./_components/BillingCard";
 import { Suspense } from "react";

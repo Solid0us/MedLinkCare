@@ -19,20 +19,31 @@ const AppointmentList = async () => {
   const appointments = await getAppointments(session?.user.id ?? "");
   if (appointments.length > 0) {
     return (
-      <>
+      <div className="flex flex-col gap-y-5">
         {appointments.map((appointment) => {
           return (
-            <Card>
+            <Card className="border-2 border-violet-300">
               <CardHeader>
-                {new Date(appointment.startDate).toLocaleString()}
+                <p>
+                  <span className="font-bold text-violet-700">Date: </span>
+                  {new Date(appointment.startDate).toLocaleString()}
+                </p>
               </CardHeader>
               <CardContent>
-                <div></div>
+                <div>
+                  <p>
+                    <span className="font-bold text-violet-700">
+                      Healthcare Provider:{" "}
+                    </span>
+                    {appointment.providers.firstName}{" "}
+                    {appointment.providers.lastName}
+                  </p>
+                </div>
               </CardContent>
             </Card>
           );
         })}
-      </>
+      </div>
     );
   } else {
     return <></>;
