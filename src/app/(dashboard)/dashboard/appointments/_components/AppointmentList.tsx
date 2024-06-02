@@ -22,7 +22,7 @@ const AppointmentList = async () => {
       <div className="flex flex-col gap-y-5">
         {appointments.map((appointment) => {
           return (
-            <Card className="border-2 border-violet-300">
+            <Card key={appointment.id} className="border-2 border-violet-300">
               <CardHeader>
                 <p>
                   <span className="font-bold text-violet-700">Date: </span>

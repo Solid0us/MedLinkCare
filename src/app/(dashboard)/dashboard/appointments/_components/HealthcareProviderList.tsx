@@ -15,7 +15,7 @@ const HealthcareProviderList = async () => {
     <>
       {healthcareProviders.map((provider) => {
         return (
-          <Card className="w-52">
+          <Card key={provider.id} className="w-52">
             <CardHeader>
               {provider.firstName} {provider.lastName}
             </CardHeader>
