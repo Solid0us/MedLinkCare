@@ -13,7 +13,7 @@ const HealthCareProvidersList = () => {
     <>
       <ul>
         {healthcareProviders?.map((provider) => (
-          <li>
+          <li key={provider.email}>
             {provider.firstName} {provider.lastName}
           </li>
         ))}
