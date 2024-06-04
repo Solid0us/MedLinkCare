@@ -1,7 +1,10 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Appointment, Users } from "@/interfaces/db_interfaces";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
+import InfoIcon from "@mui/icons-material/Info";
 
 interface HasAppointmentsAndUsers extends Appointment {
   providers: Users;
@@ -20,6 +23,7 @@ const AppointmentList = async () => {
   if (appointments.length > 0) {
     return (
       <div className="flex flex-col gap-y-5">
+        <h3 className="font-bold text-lg text-center">Upcoming Appointments</h3>
         {appointments.map((appointment) => {
           return (
             <Card key={appointment.id} className="border-2 border-violet-300">
@@ -39,6 +43,20 @@ const AppointmentList = async () => {
                     {appointment.providers.lastName}
                   </p>
                 </div>
+                <div>
+                  <Link
+                    className="underline hover:text-violet-500"
+                    href={`/dashboard/appointments/${appointment.id}`}
+                  >
+                    View Details
+                  </Link>
+                </div>
+                <div className="flex flex-col items-center gap-3 p-2">
+                  <Button>Reschedule</Button>
+                  <Button className="bg-gray-400 hover:bg-gray-500">
+                    Cancel
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           );
@@ -46,7 +64,16 @@ const AppointmentList = async () => {
       </div>
     );
   } else {
-    return <></>;
+    return (
+      <>
+        <Card className="border-violet-300">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <InfoIcon className="text-blue-500" fontSize="large" />
+            No Upcoming Appointments
+          </CardHeader>
+        </Card>
+      </>
+    );
   }
 };
 

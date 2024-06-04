@@ -1,24 +1,23 @@
 import { Suspense } from "react";
 import AppointmentList from "./_components/AppointmentList";
 import PageTitle from "../../_components/PageTitle";
-import SelectAppointmentDate from "./_components/SelectAppointmentDate";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const DashboardAppointments = () => {
   return (
     <>
       <div className="flex flex-col w-full relative gap-y-5 p-5">
         <PageTitle title="Appointments" />
-        <div className="flex flex-col-reverse md:flex-row md:justify-between">
+        <div className="flex flex-col items-center gap-y-10">
+          <Link href="/dashboard/appointments/schedule-appointments">
+            <Button>Book an appointment</Button>
+          </Link>
           <div className="flex flex-col">
-            <h3 className="font-bold text-lg text-center">
-              Upcoming Appointments
-            </h3>
             <Suspense fallback="Loading...">
               <AppointmentList />
             </Suspense>
           </div>
-
-          <SelectAppointmentDate />
         </div>
       </div>
     </>
