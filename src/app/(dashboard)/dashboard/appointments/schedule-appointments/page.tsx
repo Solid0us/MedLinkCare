@@ -1,15 +1,14 @@
 import React from "react";
-import SelectAppointmentDate from "../_components/SelectAppointmentDate";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ArrowBackTwoToneIcon from "@mui/icons-material/ArrowBackTwoTone";
-import HealthCareProvidersList from "./_components/HealthCareProvidersList";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
 import { getProviders } from "../_actions/getProviders-actions";
+import FindAppointments from "./_components/FindAppointments";
 const ScheduleAppointmentsPage = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
@@ -26,9 +25,8 @@ const ScheduleAppointmentsPage = async () => {
             Appointments
           </Button>
         </Link>
-        <SelectAppointmentDate />
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <HealthCareProvidersList />
+          <FindAppointments />
         </HydrationBoundary>
       </div>
     </>
