@@ -53,7 +53,11 @@ const FindAppointments = () => {
       />
       {availableAppointments.length > 0 ? (
         availableAppointments.map((appointment) => {
-          return <div>{appointment.startDate.toLocaleString()}</div>;
+          return (
+            <div key={appointment.id}>
+              {appointment.startDate.toLocaleString()}
+            </div>
+          );
         })
       ) : (
         <p>{resultsMessage}</p>
