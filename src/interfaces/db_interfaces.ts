@@ -1,6 +1,6 @@
 export interface Appointment {
   id: string;
-  clientsId: string;
+  clientsId: string | null;
   providersId: string;
   startDate: Date;
   endDate: Date;

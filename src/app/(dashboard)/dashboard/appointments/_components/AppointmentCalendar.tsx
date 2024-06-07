@@ -1,6 +1,7 @@
 "use client";
 import { Calendar } from "@/components/ui/calendar";
 import { Dispatch, SetStateAction, useState } from "react";
+import { DateRange } from "react-day-picker";
 
 interface AppointmentCalendarProps {
   date: Date | undefined;
