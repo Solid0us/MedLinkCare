@@ -49,4 +49,21 @@ model Appointments {
   providersId String
   startDate DateTime
   endDate DateTime
+  appointmentReasons AppointmentReasons? @relation(fields: [appointmentReasonsId], references: [id])
+  appointmentReasonsId String?
+  locations Locations @relation(fields: [locationsId], references: [id])
+  locationsId String
+}
+
+model Locations {
+  id String @id @default(uuid())
+  address String
+  appointments Appointments[]
+}
+
+model AppointmentReasons {
+  id String @id @default(uuid())
+  reason String
+  description String
+  appointments Appointments[]
 }
