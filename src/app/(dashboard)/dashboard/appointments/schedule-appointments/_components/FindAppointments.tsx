@@ -6,7 +6,7 @@ import HealthCareProvidersList from "./HealthCareProvidersList";
 import { useQuery } from "@tanstack/react-query";
 import { getProviders } from "../../_actions/getProviders-actions";
 import { getAvailableAppointments } from "../../_actions/getAvailableAppointments-actions";
-import { Appointment } from "@/interfaces/db_interfaces";
+import { Appointment, Locations } from "@/interfaces/db_interfaces";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
@@ -15,6 +15,10 @@ import { bookAppointments } from "../../_actions/bookAppointment-actions";
 export interface HasAppointmentSearch {
   providerId: string;
   date: Date;
+}
+
+export interface HasAppointmentWithLocations extends Appointment {
+  locations: Locations;
 }
 const FindAppointments = () => {
   const { data: healthcareProviders } = useQuery({
@@ -26,7 +30,7 @@ const FindAppointments = () => {
 
   const [skip, setSkip] = useState(0);
   const [availableAppointments, setAvailableAppointments] = useState<
-    Appointment[]
+    HasAppointmentWithLocations[]
   >([]);
   const [resultsMessage, setResultsMessage] = useState("");
   const [appointmentSearch, setAppointmentSearch] =
@@ -71,9 +75,8 @@ const FindAppointments = () => {
             <Card key={appointment.id}>
               <CardHeader>{appointment.startDate.toLocaleString()}</CardHeader>
               <CardContent className="flex flex-col items-center">
-                <Button onClick={() => bookAppointment(appointment.id)}>
-                  Book
-                </Button>
+                <p>{appointment.locations.address}</p>
+                <Button>Select</Button>
               </CardContent>
             </Card>
           );

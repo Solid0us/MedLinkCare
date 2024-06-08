@@ -22,6 +22,9 @@ export const getAvailableAppointments = async (
           },
         ],
       },
+      include: {
+        locations: true,
+      },
       orderBy: {
         startDate: "asc",
       },

@@ -4,6 +4,8 @@ export interface Appointment {
   providersId: string;
   startDate: Date;
   endDate: Date;
+  appointmentReasonsId: string | null;
+  locationsId: string;
 }
 
 export interface Users {
@@ -22,4 +24,15 @@ export interface UserRoles {
 export interface Roles {
   id: string;
   role: string;
+}
+
+export interface Locations {
+  id: string;
+  address: string;
+}
+
+export interface AppointmentReasons {
+  id: string;
+  reason: string;
+  description: string;
 }

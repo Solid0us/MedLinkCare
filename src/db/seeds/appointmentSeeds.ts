@@ -31,47 +31,49 @@ const seedAppointments = async () => {
         0
       )
     );
+    const randomLocationIndex = Math.floor(Math.random() * locations.length);
     appointments.push(
       {
         providersId: healthcareProviders[i].id,
         startDate: startingDate,
         endDate: addHours(startingDate, 0.5),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       },
       {
         providersId: healthcareProviders[i].id,
         startDate: addHours(startingDate, 3),
         endDate: addHours(startingDate, 3.5),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       },
       {
         providersId: healthcareProviders[i].id,
         startDate: addDays(startingDate, 5),
         endDate: addDays(addHours(startingDate, 0.5), 5),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       },
       {
         providersId: healthcareProviders[i].id,
         startDate: addDays(addHours(startingDate, 3), 5),
         endDate: addDays(addHours(startingDate, 3.5), 5),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       },
       {
         providersId: healthcareProviders[i].id,
         startDate: addDays(startingDate, 10),
         endDate: addDays(addHours(startingDate, 0.5), 10),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       },
       {
         providersId: healthcareProviders[i].id,
         startDate: addDays(addHours(startingDate, 3), 10),
         endDate: addDays(addHours(startingDate, 3.5), 10),
-        locationsId: locations[Math.floor(Math.random() * locations.length)].id,
+        locationsId: locations[randomLocationIndex].id,
       }
     );
   }
   const createdAppointments = await prisma.appointments.createMany({
     data: appointments,
+    skipDuplicates: true,
   });
 };
 

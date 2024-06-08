@@ -53,17 +53,19 @@ model Appointments {
   appointmentReasonsId String?
   locations Locations @relation(fields: [locationsId], references: [id])
   locationsId String
+  
+  @@unique([startDate, endDate, providersId], map: "uniqueAppointmentCompositeKey")
 }
 
 model Locations {
   id String @id @default(uuid())
-  address String
+  address String @unique
   appointments Appointments[]
 }
 
 model AppointmentReasons {
   id String @id @default(uuid())
-  reason String
+  reason String @unique
   description String
   appointments Appointments[]
 }
