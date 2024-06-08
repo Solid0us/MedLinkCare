@@ -18,7 +18,7 @@ const ScheduleAppointmentsPage = async () => {
   });
   return (
     <>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-5">
         <Link href="/dashboard/appointments">
           <Button className="bg-slate-500 hover:bg-slate-600">
             <ArrowBackTwoToneIcon />

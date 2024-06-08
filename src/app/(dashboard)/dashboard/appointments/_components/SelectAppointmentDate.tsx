@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import AppointmentCalendar from "./AppointmentCalendar";
 import { Dispatch, SetStateAction, useState } from "react";
 import { HasAppointmentSearch } from "../schedule-appointments/_components/FindAppointments";
-import { getAvailableAppointments } from "../_actions/getAvailableAppointments-actions";
-import { DateRange } from "react-day-picker";
 
 interface SelectAppointmentDateProps {
   appointmentSearch: HasAppointmentSearch;
@@ -18,7 +16,6 @@ const SelectAppointmentDate = ({
   fetchAvailableAppointments,
 }: SelectAppointmentDateProps) => {
   const selectDate = (date: Date | undefined) => {
-    console.log(date);
     if (date) {
       setAppointmentSearch((prevState) => ({
         ...prevState,
@@ -47,7 +44,7 @@ const SelectAppointmentDate = ({
       </h3>
       <AppointmentCalendar date={appointmentSearch.date} setDate={selectDate} />
       <Button
-        className={`p-6 ${
+        className={`p-6 bg-indigo-500 hover:bg-indigo-600 ${
           determineDisable() && "opacity-30 pointer-events-none"
         }`}
         onClick={fetchAvailableAppointments}

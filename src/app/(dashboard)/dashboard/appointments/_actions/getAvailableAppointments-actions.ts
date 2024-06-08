@@ -24,6 +24,9 @@ export const getAvailableAppointments = async (
       },
       include: {
         locations: true,
+        providers: {
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
       },
       orderBy: {
         startDate: "asc",
