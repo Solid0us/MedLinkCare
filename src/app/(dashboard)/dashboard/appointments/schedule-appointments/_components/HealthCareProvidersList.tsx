@@ -20,27 +20,29 @@ const HealthCareProvidersList = ({
   });
   return (
     <>
-      <h1 className="font-bold text-lg">Select a Provider:</h1>
-      <div className="flex flex-col w-56 h-52 overflow-auto">
-        {healthcareProviders?.map((provider) => (
-          <div
-            key={provider.id}
-            onClick={() =>
-              setAppointmentSearch((prevState) => ({
-                ...prevState,
-                providerId: provider.id,
-              }))
-            }
-            className={`w-full h-48 border-2 border-violet-300 rounded-lg cursor-pointer ${
-              appointmentSearch.providerId === provider.id && "bg-violet-200"
-            }`}
-          >
-            <h4 className="font-bold">
-              {provider.firstName} {provider.lastName}
-            </h4>
-            <p className="text-sm">{provider.email}</p>
-          </div>
-        ))}
+      <div className="flex flex-col items-center  gap-3 border-2 p-3 rounded-lg border-violet-300">
+        <h1 className="font-bold text-lg">Select a Provider:</h1>
+        <div className="flex flex-col w-56 h-52 gap-2 overflow-auto">
+          {healthcareProviders?.map((provider) => (
+            <div
+              key={provider.id}
+              onClick={() =>
+                setAppointmentSearch((prevState) => ({
+                  ...prevState,
+                  providerId: provider.id,
+                }))
+              }
+              className={`w-full h-48 border-2 border-violet-300 rounded-lg cursor-pointer ${
+                appointmentSearch.providerId === provider.id && "bg-violet-200"
+              }`}
+            >
+              <h4 className="font-bold">
+                {provider.firstName} {provider.lastName}
+              </h4>
+              <p className="text-sm">{provider.email}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
