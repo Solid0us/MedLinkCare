@@ -6,11 +6,11 @@ import HealthCareProvidersList from "./HealthCareProvidersList";
 import { useQuery } from "@tanstack/react-query";
 import { getAvailableAppointments } from "../../_actions/getAvailableAppointments-actions";
 import { Appointment, Locations, Users } from "@/interfaces/db_interfaces";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { bookAppointments } from "../../_actions/bookAppointment-actions";
 import { Separator } from "@/components/ui/separator";
+import AvailableAppointmentResults from "./AvailableAppointmentResults";
+import BookAppointmentForm from "./BookAppointmentForm";
 
 export interface HasAppointmentSearch {
   providerId: string;
@@ -30,6 +30,9 @@ const FindAppointments = () => {
   const [availableAppointments, setAvailableAppointments] = useState<
     HasAppointmentWithLocations[]
   >([]);
+  const [selectedAppointment, setSelectedAppointment] = useState<
+    HasAppointmentWithLocations | undefined
+  >();
   const [resultsMessage, setResultsMessage] = useState("");
   const [appointmentSearch, setAppointmentSearch] =
     useState<HasAppointmentSearch>({
@@ -50,14 +53,16 @@ const FindAppointments = () => {
     }
   };
 
-  const bookAppointment = (appointmentId: string) => {
-    try {
-      bookAppointments(appointmentId, session?.user.id ?? "");
-    } catch (err) {
-      console.log(err);
-      alert("Could not book appointment");
-    }
+  const handleSelectAppointment = (
+    appointment: HasAppointmentWithLocations
+  ) => {
+    setSelectedAppointment(appointment);
   };
+
+  const handleReturnToAppointmentSearch = () => {
+    setSelectedAppointment(undefined);
+  };
+
   return (
     <div className="flex flex-col items-center gap-y-3 w-full">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-10">
@@ -71,45 +76,18 @@ const FindAppointments = () => {
           fetchAvailableAppointments={fetchAvailableAppointments}
         />
       </div>
-      {availableAppointments.length > 0 ? (
-        <>
-          <Separator className="bg-black" />
-          <div className="flex flex-col w-full lg:w-5/6 p-5 border-indigo-600 border-2 rounded-lg items-center justify-center gap-y-3">
-            <h1>
-              <span className="font-bold text-indigo-500">{`${availableAppointments[0].providers.firstName}
-           ${availableAppointments[0].providers.lastName}'s `}</span>
-              {`upcoming appointments`}
-            </h1>
-            {availableAppointments.map((appointment, idx) => {
-              return (
-                <Card
-                  key={appointment.id}
-                  className="flex items-center justify-center w-full max-w-4xl border-indigo-300"
-                >
-                  <CardContent className="flex flex-col items-center w-full gap-3">
-                    <p>
-                      {appointment.startDate.toLocaleString()} (
-                      {
-                        appointment.startDate
-                          .toLocaleTimeString("en-us", {
-                            timeZoneName: "short",
-                          })
-                          .split(" ")[2]
-                      }
-                      )
-                    </p>
-                    <p>{appointment.locations.address}</p>
-                    <Button className="bg-indigo-500 hover:bg-indigo-600">
-                      Select
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </>
+      <Separator className="bg-black" />
+      {selectedAppointment ? (
+        <BookAppointmentForm
+          returnToSearch={handleReturnToAppointmentSearch}
+          appointment={selectedAppointment}
+        />
       ) : (
-        <p>{resultsMessage}</p>
+        <AvailableAppointmentResults
+          availableAppointments={availableAppointments}
+          resultsMessage={resultsMessage}
+          handleSelectAppointment={handleSelectAppointment}
+        />
       )}
     </div>
   );

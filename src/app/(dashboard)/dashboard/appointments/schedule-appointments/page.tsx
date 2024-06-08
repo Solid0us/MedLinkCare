@@ -9,12 +9,18 @@ import {
 } from "@tanstack/react-query";
 import { getProviders } from "../_actions/getProviders-actions";
 import FindAppointments from "./_components/FindAppointments";
+import getAppointmentReasons from "../_actions/getAppointmentReasons-actions";
 const ScheduleAppointmentsPage = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["healthcareProviders"],
     queryFn: getProviders,
     staleTime: 60 * 1000,
+  });
+  await queryClient.prefetchQuery({
+    queryKey: ["visitReasons"],
+    queryFn: getAppointmentReasons,
+    staleTime: 60 * 60 * 1000,
   });
   return (
     <>
