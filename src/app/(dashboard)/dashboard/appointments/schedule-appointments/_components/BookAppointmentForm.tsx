@@ -93,7 +93,7 @@ const BookAppointmentForm = ({
     } else if (mutation.isPending === false && mutation.isError) {
       console.log("error");
     }
-  }, [mutation.isPending]);
+  }, [form, mutation.isPending, mutation.isSuccess, mutation.isError]);
   return (
     <div className="flex flex-col items-center">
       <Button
