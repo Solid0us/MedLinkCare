@@ -22,6 +22,7 @@ const ScheduleAppointmentsPage = async () => {
     queryFn: getAppointmentReasons,
     staleTime: 60 * 60 * 1000,
   });
+
   return (
     <>
       <div className="flex flex-col items-center gap-5">

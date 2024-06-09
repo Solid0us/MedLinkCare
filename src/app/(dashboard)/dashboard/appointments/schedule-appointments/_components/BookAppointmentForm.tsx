@@ -32,6 +32,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import Link from "next/link";
 
 interface HasBookAppointmentForm {
   returnToSearch: () => any;
@@ -88,6 +89,7 @@ const BookAppointmentForm = ({
   useEffect(() => {
     if (mutation.isPending === false && mutation.isSuccess) {
       setIsSubmitted(true);
+      form.reset();
     } else if (mutation.isPending === false && mutation.isError) {
       console.log("error");
     }
@@ -156,12 +158,12 @@ const BookAppointmentForm = ({
             )}
           />
 
-          <div className="flex flex-col lg:flex-row items-center pt-5 pb-5 gap-3">
-            <FormField
-              control={form.control}
-              name="visitReasonId"
-              render={({ field }) => (
-                <FormItem>
+          <FormField
+            control={form.control}
+            name="visitReasonId"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col lg:flex-row items-center pt-5 pb-5 gap-3">
                   <Label>Reason for Visit</Label>
                   <Select
                     onValueChange={field.onChange}
@@ -180,11 +182,11 @@ const BookAppointmentForm = ({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="w-full flex flex-row justify-center">
             <Button
               type="submit"
@@ -193,9 +195,36 @@ const BookAppointmentForm = ({
               Book
             </Button>
             <Dialog open={isConfirmation} onOpenChange={setIsConfirmation}>
-              <DialogContent className="w-5/6">
+              <DialogContent
+                className="w-5/6"
+                onInteractOutside={(e) => {
+                  e.preventDefault();
+                }}
+              >
                 {isSubmitted ? (
-                  <div>Payment Content Here</div>
+                  <>
+                    <DialogHeader>
+                      <DialogTitle className="text-violet-400 ">
+                        Booking Successful!
+                      </DialogTitle>
+                      <DialogDescription>
+                        You have successfully booked an appointment! Would you
+                        like to pay now or later?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="w-full flex flex-row justify-center gap-5">
+                      <Link href="/dashboard/appointments">
+                        <Button className="bg-slate-500 hover:bg-slate-600">
+                          Later
+                        </Button>
+                      </Link>
+                      <Link href="/dashboard/appointments">
+                        <Button className="bg-violet-500 hover:bg-violet-600 text-wrap">
+                          Pay Now (Stripe Coming Soon!)
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
                 ) : (
                   <>
                     <DialogHeader>
@@ -240,7 +269,6 @@ const BookAppointmentForm = ({
                         Confirm
                       </Button>
                     </div>
-                    {mutation.isPending && "Pending"}
                   </>
                 )}
               </DialogContent>

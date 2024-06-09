@@ -13,5 +13,28 @@ export type FormState<T> = {
   fieldValues: T;
 };
 export const bookAppointments = async (formData: BookAppointmentForm) => {
-  console.log("server action reached!");
+  const alreadyBookedAppointment = await prisma.appointments.findFirst({
+    where: {
+      id: formData.appointmentId,
+      NOT: {
+        clientsId: null,
+      },
+    },
+  });
+  if (alreadyBookedAppointment) {
+    throw new Error("Appointment has already been booked.");
+  }
+  try {
+    await prisma.appointments.update({
+      where: {
+        id: formData.appointmentId,
+      },
+      data: {
+        clientsId: formData.clientsId,
+        appointmentReasonsId: formData.visitReasonId,
+      },
+    });
+  } catch (err) {
+    throw new Error("Unable to book appointment.");
+  }
 };

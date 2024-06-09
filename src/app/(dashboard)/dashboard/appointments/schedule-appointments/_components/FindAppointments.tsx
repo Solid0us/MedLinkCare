@@ -3,11 +3,8 @@
 import { useState } from "react";
 import SelectAppointmentDate from "../../_components/SelectAppointmentDate";
 import HealthCareProvidersList from "./HealthCareProvidersList";
-import { useQuery } from "@tanstack/react-query";
 import { getAvailableAppointments } from "../../_actions/getAvailableAppointments-actions";
 import { Appointment, Locations, Users } from "@/interfaces/db_interfaces";
-import { useSession } from "next-auth/react";
-import { bookAppointments } from "../../_actions/bookAppointment-actions";
 import { Separator } from "@/components/ui/separator";
 import AvailableAppointmentResults from "./AvailableAppointmentResults";
 import BookAppointmentForm from "./BookAppointmentForm";
@@ -24,8 +21,6 @@ export interface HasAppointmentWithLocations extends Appointment {
   providers: Users;
 }
 const FindAppointments = () => {
-  const { data: session } = useSession();
-
   const [skip, setSkip] = useState(0);
   const [availableAppointments, setAvailableAppointments] = useState<
     HasAppointmentWithLocations[]
