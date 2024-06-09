@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import SessionWrapper from "@/context/SessionWrapper";
 import DashboardSideBar from "./_components/DashboardSideBar";
+import QueryProvider from "@/context/QueryProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionWrapper>
-          <DashboardSideBar>{children}</DashboardSideBar>
+          <QueryProvider>
+            <DashboardSideBar>{children}</DashboardSideBar>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryProvider>
         </SessionWrapper>
       </body>
     </html>

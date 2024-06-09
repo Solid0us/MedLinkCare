@@ -2,6 +2,7 @@ import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import EmailIcon from "@mui/icons-material/Email";
+import PaymentIcon from "@mui/icons-material/Payment";
 
 interface DashboardSideBarItemProps {
   expand: boolean;
@@ -34,6 +35,11 @@ const DashboardSideBarItem = ({
         )}{" "}
         {label === "Inbox" && (
           <EmailIcon
+            className={`${expand ? "visible" : "invisible md:visible"}`}
+          />
+        )}
+        {label === "Payments" && (
+          <PaymentIcon
             className={`${expand ? "visible" : "invisible md:visible"}`}
           />
         )}

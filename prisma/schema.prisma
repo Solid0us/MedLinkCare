@@ -43,10 +43,29 @@ model Roles {
 
 model Appointments {
   id String @id @default(uuid())
-  clients Users @relation("clientAppointments",fields: [clientsId], references: [id])
-  clientsId String
+  clients Users? @relation("clientAppointments",fields: [clientsId], references: [id])
+  clientsId String?
   providers Users @relation("providerAppointments",fields: [providersId], references: [id])
   providersId String
   startDate DateTime
   endDate DateTime
+  appointmentReasons AppointmentReasons? @relation(fields: [appointmentReasonsId], references: [id])
+  appointmentReasonsId String?
+  locations Locations @relation(fields: [locationsId], references: [id])
+  locationsId String
+  
+  @@unique([startDate, endDate, providersId], map: "uniqueAppointmentCompositeKey")
+}
+
+model Locations {
+  id String @id @default(uuid())
+  address String @unique
+  appointments Appointments[]
+}
+
+model AppointmentReasons {
+  id String @id @default(uuid())
+  reason String @unique
+  description String
+  appointments Appointments[]
 }
