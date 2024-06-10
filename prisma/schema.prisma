@@ -23,6 +23,7 @@ model Users {
   UserRoles UserRoles[]
   ClientAppointments Appointments[] @relation("clientAppointments")
   ProviderAppointments Appointments[] @relation("providerAppointments")
+  AppointmentInvoices AppointmentInvoices[]
 }
 
 model UserRoles {
@@ -67,5 +68,35 @@ model AppointmentReasons {
   id String @id @default(uuid())
   reason String @unique
   description String
+  priceInCents BigInt @default(1000)
   appointments Appointments[]
+  appointmentInvoiceDetails AppointmentInvoiceDetails[]
+}
+
+model AppointmentInvoices {
+  id String @id @default(uuid())
+  invoiceDate DateTime @default(now())
+  dueDate DateTime
+  users Users @relation(fields: [usersId], references:[id])
+  usersId String
+  appointmentInvoiceDetails AppointmentInvoiceDetails[]
+  appointmentPayments AppointmentPayments[]
+}
+
+model AppointmentInvoiceDetails {
+  id String @id @default(uuid())
+  quantity Int 
+  lineTotalInCents BigInt
+  appointmentInvoices AppointmentInvoices @relation(fields: [appointmentInvoiceId], references: [id])
+  appointmentInvoiceId String
+  appointmentReasons AppointmentReasons @relation(fields: [appointmentReasonsId], references: [id])
+  appointmentReasonsId String
+}
+
+model AppointmentPayments {
+  id String @id @default(uuid())
+  amountPaidInCents BigInt
+  transactionDate DateTime @default(now())
+  appointmentInvoices AppointmentInvoices @relation(fields: [appointmentInvoiceId], references: [id])
+  appointmentInvoiceId String
 }
