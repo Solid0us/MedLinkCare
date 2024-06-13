@@ -33,6 +33,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
+import { convertCentsToUSD } from "@/lib/numberUtils";
 
 interface HasBookAppointmentForm {
   returnToSearch: () => any;
@@ -54,9 +55,13 @@ const BookAppointmentForm = ({
   const { data: session } = useSession();
   const [isConfirmation, setIsConfirmation] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [receipt, setReceipt] = useState({
+    invoiceId: "",
+    total: 0,
+  });
   const form = useForm<BookAppointmentForm>({
     resolver: zodResolver(bookAppointmentFormSchema),
-    mode: "onSubmit",
+    mode: "onChange",
     defaultValues: {
       appointmentId: appointment.id,
       clientsId: session?.user.id ?? "",
@@ -79,10 +84,14 @@ const BookAppointmentForm = ({
   };
 
   const handleSubmitForm = async () => {
-    mutation.mutate({
+    const response = await mutation.mutateAsync({
       appointmentId: form.getValues("appointmentId"),
       clientsId: form.getValues("clientsId"),
       visitReasonId: form.getValues("visitReasonId"),
+    });
+    setReceipt({
+      invoiceId: response.invoiceId,
+      total: Number(response.total),
     });
   };
 
@@ -94,6 +103,7 @@ const BookAppointmentForm = ({
       console.log("error");
     }
   }, [form, mutation.isPending, mutation.isSuccess, mutation.isError]);
+
   return (
     <div className="flex flex-col items-center">
       <Button
@@ -187,6 +197,17 @@ const BookAppointmentForm = ({
               </FormItem>
             )}
           />
+          {form.getValues("visitReasonId") && (
+            <p>
+              <span className="font-semibold">Price: </span>{" "}
+              {convertCentsToUSD(
+                visitReasons?.find(
+                  (reason) => reason.id === form.getValues("visitReasonId")
+                )?.priceInCents
+              )}
+            </p>
+          )}
+
           <div className="w-full flex flex-row justify-center">
             <Button
               type="submit"
@@ -208,8 +229,16 @@ const BookAppointmentForm = ({
                         Booking Successful!
                       </DialogTitle>
                       <DialogDescription>
-                        You have successfully booked an appointment! Would you
-                        like to pay now or later?
+                        You have successfully booked an appointment! Payments
+                        are due within 30 days. Would you like to pay now or
+                        later?
+                        <br />
+                        <br />
+                        <span className="font-bold">Invoice Id: </span>
+                        {receipt.invoiceId}
+                        <br />
+                        <span className="font-bold">Total: </span>
+                        {convertCentsToUSD(receipt.total)}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="w-full flex flex-row justify-center gap-5">
@@ -218,7 +247,9 @@ const BookAppointmentForm = ({
                           Later
                         </Button>
                       </Link>
-                      <Link href="/dashboard/appointments">
+                      <Link
+                        href={`/dashboard/billing/invoice/${receipt.invoiceId}`}
+                      >
                         <Button className="bg-violet-500 hover:bg-violet-600 text-wrap">
                           Pay Now (Stripe Coming Soon!)
                         </Button>
@@ -249,6 +280,14 @@ const BookAppointmentForm = ({
                               reason.id === form.getValues("visitReasonId")
                           )?.reason
                         }
+                        <br />
+                        <span className="font-bold">Price: </span>
+                        {convertCentsToUSD(
+                          visitReasons?.find(
+                            (reason) =>
+                              reason.id === form.getValues("visitReasonId")
+                          )?.priceInCents
+                        )}
                       </DialogDescription>
                     </DialogHeader>
 

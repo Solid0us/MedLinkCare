@@ -40,7 +40,7 @@ export interface AppointmentReasons {
 
 export interface AppointmentInvoices {
   id: string;
-  invoiceDate?: Date;
+  invoiceDate: Date;
   dueDate: Date;
   usersId: string;
 }
@@ -48,7 +48,7 @@ export interface AppointmentInvoices {
 export interface AppointmentInvoiceDetails {
   id: string;
   quantity: number;
-  lineTotalInCents: number;
+  lineTotalInCents: BigInt;
   appointmentInvoiceId: string;
   appointmentReasonsId: string;
 }
