@@ -35,4 +35,27 @@ export interface AppointmentReasons {
   id: string;
   reason: string;
   description: string;
+  priceInCents?: number;
+}
+
+export interface AppointmentInvoices {
+  id: string;
+  invoiceDate: Date;
+  dueDate: Date;
+  usersId: string;
+}
+
+export interface AppointmentInvoiceDetails {
+  id: string;
+  quantity: number;
+  lineTotalInCents: BigInt;
+  appointmentInvoiceId: string;
+  appointmentReasonsId: string;
+}
+
+export interface AppointmentPayments {
+  id: string;
+  amountPaidInCents: number;
+  transactionDate: Date;
+  appointmentInvoiceId: string;
 }
