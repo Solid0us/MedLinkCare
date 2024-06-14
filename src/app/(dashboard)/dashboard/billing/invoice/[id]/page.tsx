@@ -20,7 +20,6 @@ const AppointmentIdPage = async ({ params }: { params: { id: string } }) => {
   const total = invoice.appointmentInvoiceDetails
     .map((item) => item.lineTotalInCents)
     .reduce((partialSum, a) => partialSum + Number(a), 0);
-  console.log(total);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: total,
     currency: "USD",

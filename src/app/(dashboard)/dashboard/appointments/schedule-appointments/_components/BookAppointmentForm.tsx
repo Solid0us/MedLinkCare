@@ -251,7 +251,7 @@ const BookAppointmentForm = ({
                         href={`/dashboard/billing/invoice/${receipt.invoiceId}`}
                       >
                         <Button className="bg-violet-500 hover:bg-violet-600 text-wrap">
-                          Pay Now (Stripe Coming Soon!)
+                          Pay Now
                         </Button>
                       </Link>
                     </div>
