@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse, NextRequest } from "next/server";
+import { prisma } from "@/db/prisma";
 
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!);
 export const POST = async (req: NextRequest, res: NextResponse) => {
@@ -17,7 +18,18 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       sig!,
       process.env.NEXT_STRIPE_WEHOOK_SECRET!
     );
-    console.log("event", event.type);
+
+    if (event.type === "payment_intent.succeeded") {
+      const { amount, metadata } = event.data.object;
+      if (metadata.invoiceId) {
+        await prisma.appointmentPayments.create({
+          data: {
+            amountPaidInCents: amount,
+            appointmentInvoiceId: metadata.invoiceId,
+          },
+        });
+      }
+    }
     return NextResponse.json({ status: "success", event: event.type });
   } catch (err) {
     return NextResponse.json({ status: "Failed", err });
