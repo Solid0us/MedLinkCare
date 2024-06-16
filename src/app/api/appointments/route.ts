@@ -15,12 +15,16 @@ export const GET = async (req: NextRequest) => {
       },
     },
   };
+  let orderByOptions: Prisma.AppointmentsOrderByWithRelationInput = {};
+  req.nextUrl.searchParams.get("start-date-order") === "asc" &&
+    Object.assign(orderByOptions, { startDate: "asc" });
+  req.nextUrl.searchParams.get("start-date-order") === "desc" &&
+    Object.assign(orderByOptions, { startDate: "desc" });
+
   const appointments = await prisma.appointments.findMany({
     where: whereOptions,
     include: includeOptions,
-    orderBy: {
-      startDate: "desc",
-    },
+    orderBy: orderByOptions,
   });
   return NextResponse.json({
     status: "success",

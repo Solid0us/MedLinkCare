@@ -11,7 +11,7 @@ interface HasAppointmentsAndUsers extends Appointment {
 }
 const getAppointments = async (id: string) => {
   const res = await fetch(
-    `${process.env.NEXT_BASE_URL}/api/appointments?clientId=${id}&providers=true`
+    `${process.env.NEXT_BASE_URL}/api/appointments?clientId=${id}&providers=true&start-date-order=asc`
   );
   const data: HasAppointmentsAndUsers[] = (await res.json()).data;
   return data;

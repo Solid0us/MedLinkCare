@@ -1,8 +1,27 @@
 "use server";
 
 import { prisma } from "@/db/prisma";
+import { Prisma } from "@prisma/client";
 
-export const getOustandingPaymentsActions = async (userId: string) => {
+export type InvoicesWithPaymentsAndDetails =
+  Prisma.AppointmentInvoicesGetPayload<{
+    include: {
+      appointmentPayments: true;
+      appointmentInvoiceDetails: {
+        include: {
+          appointmentReasons: true;
+        };
+      };
+    };
+  }>;
+
+export const getOustandingPaymentsActions = async (
+  userId: string
+): Promise<{
+  totalDueInCents: number;
+  unpaidInvoices: InvoicesWithPaymentsAndDetails[];
+  paidInvoices: InvoicesWithPaymentsAndDetails[];
+}> => {
   const invoices = await prisma.appointmentInvoices.findMany({
     include: {
       appointmentPayments: true,
@@ -14,6 +33,9 @@ export const getOustandingPaymentsActions = async (userId: string) => {
     },
     where: {
       usersId: userId,
+    },
+    orderBy: {
+      invoiceDate: "asc",
     },
   });
   let totalDueInCents = 0;
@@ -28,6 +50,13 @@ export const getOustandingPaymentsActions = async (userId: string) => {
     const amountLeft = invoiceTotalInCents - totalPaid;
     totalDueInCents += amountLeft;
   }
-  console.log(totalDueInCents);
-  return invoices;
+  return {
+    totalDueInCents,
+    unpaidInvoices: invoices.filter(
+      (invoice) => invoice.appointmentPayments.length === 0
+    ),
+    paidInvoices: invoices.filter(
+      (invoice) => invoice.appointmentPayments.length > 0
+    ),
+  };
 };
