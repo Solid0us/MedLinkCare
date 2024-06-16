@@ -36,49 +36,47 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
       </CardHeader>
       <Separator className="bg-indigo-500 mb-5" />
       <CardContent className="flex flex-col gap-y-5">
-        {unpaidInvoices
-          .filter((invoice) => invoice.appointmentPayments.length === 0)
-          .map((invoice) => (
-            <>
-              {
-                <Card className="p-2 border-indigo-300 border-2">
-                  <CardHeader>
-                    <CardTitle> Invoice ID: {invoice.id}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col lg:flex-row justify-between">
-                      <div>
-                        <p>
-                          Invoice Date:{" "}
-                          {new Date(invoice.invoiceDate).toLocaleString()}
-                        </p>
-                        <p>
-                          Due Date: {new Date(invoice.dueDate).toLocaleString()}
-                        </p>
-                      </div>
-                      <Button>Pay now</Button>
+        {unpaidInvoices.map((invoice) => (
+          <>
+            {
+              <Card key={invoice.id} className="p-2 border-indigo-300 border-2">
+                <CardHeader>
+                  <CardTitle> Invoice ID: {invoice.id}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col lg:flex-row justify-between">
+                    <div>
+                      <p>
+                        Invoice Date:{" "}
+                        {new Date(invoice.invoiceDate).toLocaleString()}
+                      </p>
+                      <p>
+                        Due Date: {new Date(invoice.dueDate).toLocaleString()}
+                      </p>
                     </div>
-                  </CardContent>
-                  <CardFooter>
-                    {invoice.appointmentInvoiceDetails.map((detail) => (
-                      <ol className="list-disc ml-8">
-                        <li>
-                          {`${
-                            detail.appointmentReasons.reason
-                          } - ${convertCentsToUSD(
-                            detail.appointmentReasons.priceInCents
-                          )}`}
-                          <p className="text-slate-400 text-sm">
-                            Description: {detail.appointmentReasons.description}
-                          </p>
-                        </li>
-                      </ol>
-                    ))}
-                  </CardFooter>
-                </Card>
-              }
-            </>
-          ))}
+                    <Button>Pay now</Button>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  {invoice.appointmentInvoiceDetails.map((detail) => (
+                    <ol key={detail.id} className="list-disc ml-8">
+                      <li>
+                        {`${
+                          detail.appointmentReasons.reason
+                        } - ${convertCentsToUSD(
+                          detail.appointmentReasons.priceInCents
+                        )}`}
+                        <p className="text-slate-400 text-sm">
+                          Description: {detail.appointmentReasons.description}
+                        </p>
+                      </li>
+                    </ol>
+                  ))}
+                </CardFooter>
+              </Card>
+            }
+          </>
+        ))}
       </CardContent>
     </Card>
   );
