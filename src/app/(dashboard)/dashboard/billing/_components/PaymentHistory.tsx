@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import React from "react";
-import { InvoicesWithPaymentsAndDetails } from "../invoice/[id]/_actions/getOustandingPayments-actions";
+import { InvoicesWithPaymentsAndDetails } from "../invoices/[id]/_actions/getOustandingPayments-actions";
 import { sortByDate } from "@/lib/sortingUtils";
 import { convertCentsToUSD } from "@/lib/numberUtils";
 import {

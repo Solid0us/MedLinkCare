@@ -11,7 +11,11 @@ const AppointmentIdPage = async ({ params }: { params: { id: string } }) => {
       id: params.id,
     },
     include: {
-      appointmentInvoiceDetails: true,
+      appointmentInvoiceDetails: {
+        include: {
+          appointmentReasons: true,
+        },
+      },
     },
   });
   if (!invoice) {

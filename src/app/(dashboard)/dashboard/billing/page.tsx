@@ -1,5 +1,5 @@
 import React from "react";
-import { getOustandingPaymentsActions } from "./invoice/[id]/_actions/getOustandingPayments-actions";
+import { getOustandingPaymentsActions } from "./invoices/[id]/_actions/getOustandingPayments-actions";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import AnimateTitleLeftToRight from "@/animations/AnimateTitleLeftToRight";

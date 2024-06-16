@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { convertCentsToUSD } from "@/lib/numberUtils";
-import { InvoicesWithPaymentsAndDetails } from "../invoice/[id]/_actions/getOustandingPayments-actions";
+import { InvoicesWithPaymentsAndDetails } from "../invoices/[id]/_actions/getOustandingPayments-actions";
 import { calculateDaysRemaining } from "@/lib/dateUtils";
 import Link from "next/link";
 
@@ -42,7 +42,9 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
             </p>
           </div>
           {unpaidInvoices.length > 0 && (
-            <Button>Pay All Pending Invoices</Button>
+            <Link href="/dashboard/billing/invoices">
+              <Button>Pay All Pending Invoices</Button>
+            </Link>
           )}
         </div>
       </CardHeader>
@@ -75,7 +77,9 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
                             {determineDaysRemainingText(invoice.dueDate)})
                           </p>
                         </div>
-                        <Link href={`/dashboard/billing/invoice/${invoice.id}`}>
+                        <Link
+                          href={`/dashboard/billing/invoices/${invoice.id}`}
+                        >
                           <Button>Pay now</Button>
                         </Link>
                       </div>

@@ -7,11 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  AppointmentInvoiceDetails,
-  AppointmentInvoices,
-} from "@/interfaces/db_interfaces";
 import { convertCentsToUSD } from "@/lib/numberUtils";
+import { Prisma } from "@prisma/client";
 import {
   Elements,
   PaymentElement,
@@ -20,13 +17,18 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { FormEvent } from "react";
-
-interface AppointmentInvoicesWithDetails extends AppointmentInvoices {
-  appointmentInvoiceDetails: AppointmentInvoiceDetails[];
-}
+import CheckoutLineItemsTable from "../../_components/CheckoutLineItemsTable";
 
 interface CheckoutFormProps {
-  invoice: AppointmentInvoicesWithDetails;
+  invoice: Prisma.AppointmentInvoicesGetPayload<{
+    include: {
+      appointmentInvoiceDetails: {
+        include: {
+          appointmentReasons: true;
+        };
+      };
+    };
+  }>;
   clientSecret: string;
 }
 
@@ -36,26 +38,8 @@ const stripePromise = loadStripe(
 
 const CheckoutForm = ({ invoice, clientSecret }: CheckoutFormProps) => {
   return (
-    <div>
-      <div className="flex flex-col gap-3 p-3 border rounded-lg">
-        <h1>
-          <span className="font-bold">Invoice ID: </span>
-          {invoice.id}
-        </h1>
-        <p>Invoice Date: {invoice.invoiceDate.toLocaleString()}</p>
-        <div>
-          <h1>Line Items</h1>
-          <ul>
-            {invoice.appointmentInvoiceDetails.map((item) => {
-              return (
-                <li key={item.id}>
-                  {convertCentsToUSD(item.lineTotalInCents)}{" "}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+    <div className="flex flex-col gap-5">
+      <CheckoutLineItemsTable invoices={[invoice]} />
       <Elements options={{ clientSecret }} stripe={stripePromise}>
         <Form id={invoice.id} />
       </Elements>
@@ -73,7 +57,7 @@ const Form = ({ id }: { id: string }) => {
         .confirmPayment({
           elements,
           confirmParams: {
-            return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/billing/invoice/${id}/success`,
+            return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/billing/invoices/${id}/success`,
           },
         })
         .then(({ error }) => {
