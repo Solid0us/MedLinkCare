@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { convertCentsToUSD } from "@/lib/numberUtils";
 import { Prisma } from "@prisma/client";
 import {
   Elements,
