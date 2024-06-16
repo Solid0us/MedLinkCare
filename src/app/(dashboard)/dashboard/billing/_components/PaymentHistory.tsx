@@ -64,10 +64,8 @@ const PaymentHistory = ({ invoiceBillingDetails }: PaymentHistoryProps) => {
                 )
                 .map((invoice) => (
                   <>
-                    <TableRow className={invoice.id}>
-                      <TableCell>
-                        {new Date(invoice.invoiceDate).toLocaleString()}
-                      </TableCell>
+                    <TableRow key={invoice.id}>
+                      <TableCell>{invoice.id}</TableCell>
                       <TableCell>
                         {new Date(
                           invoice.appointmentPayments[0].transactionDate
@@ -91,7 +89,6 @@ const PaymentHistory = ({ invoiceBillingDetails }: PaymentHistoryProps) => {
                                     <li>
                                       {`${detail.appointmentReasons.reason}`}
                                       <p className="text-slate-400 text-sm">
-                                        Description:{" "}
                                         {detail.appointmentReasons.description}
                                       </p>
                                     </li>
