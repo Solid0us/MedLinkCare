@@ -7,17 +7,15 @@ import { Button } from "@/components/ui/button";
 const DashboardAppointments = () => {
   return (
     <>
-      <div className="flex flex-col w-full relative gap-y-5 p-5">
-        <PageTitle title="Appointments" />
-        <div className="flex flex-col items-center gap-y-10">
-          <Link href="/dashboard/appointments/schedule-appointments">
-            <Button>Book an appointment</Button>
-          </Link>
-          <div className="flex flex-col">
-            <Suspense fallback="Loading...">
-              <AppointmentList />
-            </Suspense>
-          </div>
+      <PageTitle title="Appointments" />
+      <div className="flex flex-col items-center gap-y-10">
+        <Link href="/dashboard/appointments/schedule-appointments">
+          <Button>Book an appointment</Button>
+        </Link>
+        <div className="flex flex-col">
+          <Suspense fallback="Loading...">
+            <AppointmentList />
+          </Suspense>
         </div>
       </div>
     </>

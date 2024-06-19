@@ -5,6 +5,7 @@ import SessionWrapper from "@/context/SessionWrapper";
 import DashboardSideBar from "./_components/DashboardSideBar";
 import QueryProvider from "@/context/QueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import DashboardBodyMainDiv from "./_components/DashboardBodyMainDiv";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionWrapper>
           <QueryProvider>
-            <DashboardSideBar>{children}</DashboardSideBar>
+            <DashboardSideBar>
+              <DashboardBodyMainDiv>{children}</DashboardBodyMainDiv>
+            </DashboardSideBar>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </SessionWrapper>
