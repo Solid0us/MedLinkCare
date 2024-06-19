@@ -11,14 +11,58 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
 
   const dateTime = new Date(response?.created * 1000).toLocaleDateString();
   const timeString = new Date(response?.created * 1000).toLocaleDateString();
-
+  console.log(
+    (
+      await stripe.products.list({ expand: ["data.default_price"] })
+    ).data.filter((product) => product.active === true)
+  );
   try {
     let event = stripe.webhooks.constructEvent(
       payload,
       sig!,
       process.env.NEXT_STRIPE_WEHOOK_SECRET!
     );
-
+    // Create appoint reason when product is created
+    if (event.type === "product.created") {
+      const { id, description, name } = event.data.object;
+      try {
+        await prisma.appointmentReasons.upsert({
+          where: {
+            id,
+          },
+          create: {
+            id,
+            reason: name,
+            description: description ?? "",
+          },
+          update: {},
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    // Update appointment's price when price is created
+    if (event.type === "price.created" || event.type === "price.updated") {
+      const {
+        id,
+        product: productId,
+        unit_amount: unitAmountInCents,
+      } = event.data.object;
+      if (unitAmountInCents) {
+        try {
+          await prisma.appointmentReasons.update({
+            where: {
+              id: productId as string,
+            },
+            data: {
+              priceInCents: unitAmountInCents,
+            },
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
     if (event.type === "payment_intent.succeeded") {
       const { amount, metadata } = event.data.object;
       if (metadata.invoiceId) {
