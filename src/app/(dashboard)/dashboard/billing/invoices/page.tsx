@@ -1,9 +1,6 @@
 import React from "react";
 import Stripe from "stripe";
 import { getServerSession } from "next-auth";
-import CheckoutLineItemsTable, {
-  addAllInvoiceLineItems,
-} from "./_components/CheckoutLineItemsTable";
 import { getOustandingPaymentsActions } from "./[id]/_actions/getOustandingPayments-actions";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import CheckoutForm from "./_components/CheckoutForm";
@@ -21,22 +18,28 @@ const InvoicesPage = async () => {
   if (!invoicesWithDetails) {
     return <p>Invoices do not exist.</p>;
   }
-  // TODO: Need to implement product/price ID matching of database
+
   const stripeSession = await stripe.checkout.sessions.create({
+    customer_email: session?.user.email ?? undefined,
     ui_mode: "embedded",
     payment_method_types: ["card"],
-    line_items: [
-      {
-        price_data: {
-          product: "prod_QGL3IJVSzdCPi2",
-          currency: "usd",
-          unit_amount: 2500,
-        },
-        quantity: 1,
+    metadata: {
+      invoices: invoicesWithDetails.unpaidInvoices
+        .map((invoice) => invoice.id)
+        .join(","),
+    },
+    line_items: invoicesWithDetails.unpaidInvoices.map((invoice) => ({
+      price_data: {
+        product: invoice.appointmentInvoiceDetails[0].appointmentReasonsId,
+        currency: "usd",
+        unit_amount: Number(
+          invoice.appointmentInvoiceDetails[0].lineTotalInCents
+        ),
       },
-    ],
+      quantity: invoice.appointmentInvoiceDetails[0].quantity,
+    })),
     mode: "payment",
-    return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
+    return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/billing`,
   });
   return (
     <CheckoutForm
