@@ -11,6 +11,8 @@ import { HasInbox } from "../page";
 import { Prisma } from "@prisma/client";
 
 interface InboxListProps {
+  selectedInbox: string;
+  setSelectedInbox: React.Dispatch<SetStateAction<string>>;
   inbox: HasInbox;
   setMessageList: React.Dispatch<
     SetStateAction<
@@ -20,8 +22,12 @@ interface InboxListProps {
     >
   >;
 }
-const InboxList = ({ inbox, setMessageList }: InboxListProps) => {
-  const [selectedInbox, setSelectedInbox] = useState<string>("");
+const InboxList = ({
+  inbox,
+  setMessageList,
+  selectedInbox,
+  setSelectedInbox,
+}: InboxListProps) => {
   const handleSelectInbox = (
     userId: string,
     messages: Prisma.MessagesGetPayload<{
@@ -38,7 +44,7 @@ const InboxList = ({ inbox, setMessageList }: InboxListProps) => {
         <Card
           onClick={() => handleSelectInbox(key, inbox[key].messages)}
           key={key}
-          className={`max-w-60 border-violet-500 hover:cursor-pointer ${
+          className={`w-60 max-w-full border-violet-500 hover:cursor-pointer ${
             selectedInbox === key && "bg-violet-100"
           }`}
         >

@@ -2,7 +2,7 @@
 import SendIcon from "@mui/icons-material/Send";
 const MessageInput = () => {
   return (
-    <div className="w-5/6 bg-white border-2 flex flex-row items-center justify-between border-violet-300 rounded-lg p-3 ml-auto mr-auto mt-auto sticky bottom-0">
+    <div className="w-11/12 md:w-5/6 bg-white border-2 flex flex-row items-center justify-between border-violet-300 rounded-lg p-3 ml-auto mr-auto mt-auto sticky bottom-0">
       <textarea
         className="w-full h-auto focus:outline-none text-wrap resize-none"
         placeholder="Send a message..."

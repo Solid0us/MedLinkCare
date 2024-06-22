@@ -18,7 +18,7 @@ const UserMessage = ({ message }: UserMessageProps) => {
       transition={{ duration: 0.25 }}
     >
       <Card
-        className={`w-full md:w-1/3 pt-2 ${
+        className={`w-5/6 lg:w-5/12 pt-2 ${
           message.receiverId === data?.user.id
             ? "bg-green-300"
             : "bg-purple-300 ml-auto"
