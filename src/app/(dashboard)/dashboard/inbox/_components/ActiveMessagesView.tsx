@@ -2,6 +2,7 @@
 import { Prisma } from "@prisma/client";
 import React from "react";
 import UserMessage from "./UserMessage";
+import MessageInput from "./MessageInput";
 
 interface ActiveMessagesViewProps {
   messages: Prisma.MessagesGetPayload<{
@@ -15,6 +16,7 @@ const ActiveMessagesView = ({ messages }: ActiveMessagesViewProps) => {
       {messages.toReversed().map((message) => (
         <UserMessage key={message.id} message={message} />
       ))}
+      <MessageInput />
     </div>
   );
 };
