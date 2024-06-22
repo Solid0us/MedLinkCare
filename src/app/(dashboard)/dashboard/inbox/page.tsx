@@ -4,6 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import InboxList from "./_components/InboxList";
 import { Prisma } from "@prisma/client";
+import InboxView from "./_components/InboxView";
 
 export interface HasInbox {
   [key: string]: {
@@ -60,14 +61,9 @@ const InboxPage = async () => {
   if (session?.user.id) {
     const messages = await getMessages(session.user.id);
     const inbox = groupMessagesIntoInboxes(messages, session.user.id);
-    console.log(
-      Object.keys(inbox).map((key) => {
-        return inbox[key].messages;
-      })
-    );
     return (
       <>
-        <InboxList inbox={inbox} />
+        <InboxView inbox={inbox} />
       </>
     );
   }
