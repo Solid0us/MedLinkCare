@@ -24,6 +24,8 @@ model Users {
   ClientAppointments Appointments[] @relation("clientAppointments")
   ProviderAppointments Appointments[] @relation("providerAppointments")
   AppointmentInvoices AppointmentInvoices[]
+  SenderMessages Messages[] @relation("senderMessage")
+  ReceiverMessages Messages[] @relation("receiverMessage")
 }
 
 model UserRoles {
@@ -99,4 +101,14 @@ model AppointmentPayments {
   transactionDate DateTime @default(now())
   appointmentInvoices AppointmentInvoices @relation(fields: [appointmentInvoiceId], references: [id])
   appointmentInvoiceId String
+}
+
+model Messages {
+  id String @id @default(uuid())
+  date DateTime @default(now())
+  message String @db.VarChar(2000)
+  sender Users @relation("senderMessage",fields: [senderId], references: [id])
+  senderId String
+  receiver Users @relation("receiverMessage",fields: [receiverId], references: [id])
+  receiverId String
 }

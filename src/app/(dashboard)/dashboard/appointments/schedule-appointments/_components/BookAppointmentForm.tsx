@@ -74,7 +74,7 @@ const BookAppointmentForm = ({
     },
   });
 
-  const { data: visitReasons } = useQuery({
+  const { data: visitReasons, status: visitReasonsStatus } = useQuery({
     queryKey: ["visitReasons"],
     queryFn: getAppointmentReasons,
   });
@@ -103,7 +103,6 @@ const BookAppointmentForm = ({
       console.log("error");
     }
   }, [form, mutation.isPending, mutation.isSuccess, mutation.isError]);
-
   return (
     <div className="flex flex-col items-center">
       <Button
@@ -213,7 +212,7 @@ const BookAppointmentForm = ({
               type="submit"
               className="bg-indigo-500 hover:bg-indigo-600 p-3 text-white rounded-lg"
             >
-              Book
+              Book {visitReasonsStatus === "pending" && "Loading"}
             </Button>
             <Dialog open={isConfirmation} onOpenChange={setIsConfirmation}>
               <DialogContent
