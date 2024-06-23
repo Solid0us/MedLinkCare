@@ -3,20 +3,23 @@ import { Prisma } from "@prisma/client";
 import React from "react";
 import UserMessage from "./UserMessage";
 import MessageInput from "./MessageInput";
+import { HasInbox } from "../page";
 
 interface ActiveMessagesViewProps {
-  messages: Prisma.MessagesGetPayload<{
-    include: { receiver: true; sender: true };
-  }>[];
+  inbox: HasInbox;
+  selectedInbox: string;
 }
 
-const ActiveMessagesView = ({ messages }: ActiveMessagesViewProps) => {
+const ActiveMessagesView = ({
+  inbox,
+  selectedInbox,
+}: ActiveMessagesViewProps) => {
   return (
     <div className="h-[calc(90vh)] w-full border border-indigo-500 rounded-lg p-5 overflow-auto flex flex-col gap-5">
-      {messages.toReversed().map((message) => (
+      {inbox[selectedInbox].messages.toReversed().map((message) => (
         <UserMessage key={message.id} message={message} />
       ))}
-      <MessageInput />
+      <MessageInput inboxId={selectedInbox} />
     </div>
   );
 };
