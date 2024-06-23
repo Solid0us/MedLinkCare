@@ -2,33 +2,31 @@
 import { useState } from "react";
 import { HasInbox } from "../page";
 import InboxList from "./InboxList";
-import { Prisma } from "@prisma/client";
 import ActiveMessagesView from "./ActiveMessagesView";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import StartNewConversation from "./StartNewConversation";
 
 interface InboxViewProps {
   inbox: HasInbox;
 }
 const InboxView = ({ inbox }: InboxViewProps) => {
-  const [messageList, setMessageList] = useState<
-    Prisma.MessagesGetPayload<{
-      include: { receiver: true; sender: true };
-    }>[]
-  >([]);
   const [selectedInbox, setSelectedInbox] = useState<string>("");
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-x-10 gap-y-5">
-        <div className="hidden lg:block">
+        <div className="hidden  lg:flex lg:flex-col lg:items-center lg:gap-5">
+          <StartNewConversation
+            inbox={inbox}
+            setSelectedInbox={setSelectedInbox}
+          />
           <InboxList
             selectedInbox={selectedInbox}
             setSelectedInbox={setSelectedInbox}
             inbox={inbox}
-            setMessageList={setMessageList}
           />
         </div>
         <Popover>
@@ -40,12 +38,11 @@ const InboxView = ({ inbox }: InboxViewProps) => {
               selectedInbox={selectedInbox}
               setSelectedInbox={setSelectedInbox}
               inbox={inbox}
-              setMessageList={setMessageList}
             />
           </PopoverContent>
         </Popover>
-        {messageList.length > 0 && (
-          <ActiveMessagesView messages={messageList} />
+        {selectedInbox && (
+          <ActiveMessagesView inbox={inbox} selectedInbox={selectedInbox} />
         )}
       </div>
     </>
