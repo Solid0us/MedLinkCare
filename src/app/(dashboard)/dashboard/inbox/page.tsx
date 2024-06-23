@@ -2,9 +2,14 @@ import React from "react";
 import getMessages from "./_actions/getMessages-actions";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import InboxList from "./_components/InboxList";
 import { Prisma } from "@prisma/client";
 import InboxView from "./_components/InboxView";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import getHealthcareProviders from "./_actions/getHealthcareProviders-actions";
 
 export interface HasInbox {
   [key: string]: {
@@ -58,12 +63,20 @@ const groupMessagesIntoInboxes = (
 
 const InboxPage = async () => {
   const session = await getServerSession(authOptions);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["newConvoHealthcareProviders"],
+    queryFn: getHealthcareProviders,
+    staleTime: 60 * 1000,
+  });
   if (session?.user.id) {
     const messages = await getMessages(session.user.id);
     const inbox = groupMessagesIntoInboxes(messages, session.user.id);
     return (
       <>
-        <InboxView inbox={inbox} />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <InboxView inbox={inbox} />
+        </HydrationBoundary>
       </>
     );
   }
