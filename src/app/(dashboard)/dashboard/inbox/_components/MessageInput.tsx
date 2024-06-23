@@ -7,9 +7,13 @@ import { useSession } from "next-auth/react";
 
 interface MessageInputProps {
   inboxId: string;
+  bottomOfMessageBoxRef: React.RefObject<HTMLDivElement>;
 }
 
-const MessageInput = ({ inboxId }: MessageInputProps) => {
+const MessageInput = ({
+  inboxId,
+  bottomOfMessageBoxRef,
+}: MessageInputProps) => {
   const { data: session } = useSession();
   const [message, setMessage] = useState("");
   const { mutateAsync: mutateSendMessage } = useMutation({
@@ -22,6 +26,7 @@ const MessageInput = ({ inboxId }: MessageInputProps) => {
       }),
     onSuccess: () => {
       setMessage("");
+      bottomOfMessageBoxRef.current?.scrollIntoView({ behavior: "smooth" });
     },
   });
   return (
