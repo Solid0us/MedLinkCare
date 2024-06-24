@@ -34,11 +34,17 @@ const InboxView = ({ inbox }: InboxViewProps) => {
             Open Inbox
           </PopoverTrigger>
           <PopoverContent>
-            <InboxList
-              selectedInbox={selectedInbox}
-              setSelectedInbox={setSelectedInbox}
-              inbox={inbox}
-            />
+            <div className="flex flex-col items-center gap-5">
+              <StartNewConversation
+                inbox={inbox}
+                setSelectedInbox={setSelectedInbox}
+              />
+              <InboxList
+                selectedInbox={selectedInbox}
+                setSelectedInbox={setSelectedInbox}
+                inbox={inbox}
+              />
+            </div>
           </PopoverContent>
         </Popover>
         {selectedInbox && (
