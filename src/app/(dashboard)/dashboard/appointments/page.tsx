@@ -3,6 +3,7 @@ import AppointmentList from "./_components/AppointmentList";
 import PageTitle from "../../_components/PageTitle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Loading from "./loading";
 
 const DashboardAppointments = () => {
   return (
@@ -13,9 +14,7 @@ const DashboardAppointments = () => {
           <Button>Book an appointment</Button>
         </Link>
         <div className="flex flex-col">
-          <Suspense fallback="Loading...">
-            <AppointmentList />
-          </Suspense>
+          <AppointmentList />
         </div>
       </div>
     </>
