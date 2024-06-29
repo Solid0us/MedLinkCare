@@ -8,6 +8,7 @@ import { Appointment, Locations, Users } from "@/interfaces/db_interfaces";
 import { Separator } from "@/components/ui/separator";
 import AvailableAppointmentResults from "./AvailableAppointmentResults";
 import BookAppointmentForm from "./BookAppointmentForm";
+import { useQuery } from "@tanstack/react-query";
 
 export interface HasAppointmentSearch {
   providerId: string;
@@ -22,13 +23,9 @@ export interface HasAppointmentWithLocations extends Appointment {
 }
 const FindAppointments = () => {
   const [skip, setSkip] = useState(0);
-  const [availableAppointments, setAvailableAppointments] = useState<
-    HasAppointmentWithLocations[]
-  >([]);
   const [selectedAppointment, setSelectedAppointment] = useState<
     HasAppointmentWithLocations | undefined
   >();
-  const [resultsMessage, setResultsMessage] = useState("");
   const [appointmentSearch, setAppointmentSearch] =
     useState<HasAppointmentSearch>({
       providerId: "",
@@ -36,17 +33,18 @@ const FindAppointments = () => {
       providerFirstName: "",
       providerLastName: "",
     });
-
-  const fetchAvailableAppointments = async () => {
-    const appointments = await getAvailableAppointments(
-      appointmentSearch,
-      skip
-    );
-    setAvailableAppointments(appointments);
-    if (appointments.length === 0) {
-      setResultsMessage("No appointments were found.");
-    }
-  };
+  const { data: appointmentResults, isFetching: isFetchingAppointmentResults } =
+    useQuery({
+      queryKey: [
+        "appointmentList",
+        appointmentSearch.providerId,
+        appointmentSearch.date,
+      ],
+      queryFn: () => getAvailableAppointments(appointmentSearch, skip),
+      staleTime: 60 * 1000,
+      placeholderData: [],
+      enabled: !!appointmentSearch.providerId,
+    });
 
   const handleSelectAppointment = (
     appointment: HasAppointmentWithLocations
@@ -65,10 +63,10 @@ const FindAppointments = () => {
           appointmentSearch={appointmentSearch}
           setAppointmentSearch={setAppointmentSearch}
         />
+
         <SelectAppointmentDate
           appointmentSearch={appointmentSearch}
           setAppointmentSearch={setAppointmentSearch}
-          fetchAvailableAppointments={fetchAvailableAppointments}
         />
       </div>
       <Separator className="bg-black" />
@@ -78,11 +76,14 @@ const FindAppointments = () => {
           appointment={selectedAppointment}
         />
       ) : (
-        <AvailableAppointmentResults
-          availableAppointments={availableAppointments}
-          resultsMessage={resultsMessage}
-          handleSelectAppointment={handleSelectAppointment}
-        />
+        <>
+          <AvailableAppointmentResults
+            appointmentSearch={appointmentSearch}
+            availableAppointments={appointmentResults ?? []}
+            handleSelectAppointment={handleSelectAppointment}
+            isLoading={isFetchingAppointmentResults}
+          />
+        </>
       )}
     </div>
   );

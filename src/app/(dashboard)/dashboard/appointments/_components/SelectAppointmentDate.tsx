@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import AppointmentCalendar from "./AppointmentCalendar";
 import { Dispatch, SetStateAction, useState } from "react";
 import { HasAppointmentSearch } from "../schedule-appointments/_components/FindAppointments";
@@ -7,13 +6,11 @@ import { HasAppointmentSearch } from "../schedule-appointments/_components/FindA
 interface SelectAppointmentDateProps {
   appointmentSearch: HasAppointmentSearch;
   setAppointmentSearch: Dispatch<SetStateAction<HasAppointmentSearch>>;
-  fetchAvailableAppointments: () => void;
 }
 
 const SelectAppointmentDate = ({
   appointmentSearch,
   setAppointmentSearch,
-  fetchAvailableAppointments,
 }: SelectAppointmentDateProps) => {
   const selectDate = (date: Date | undefined) => {
     if (date) {
@@ -24,33 +21,10 @@ const SelectAppointmentDate = ({
     }
   };
 
-  const determineButtonText = () => {
-    if (!appointmentSearch.providerId) {
-      return "Please select a provider";
-    } else {
-      return `Search`;
-    }
-  };
-  const determineDisable = () => {
-    if (!appointmentSearch.providerId) {
-      return true;
-    }
-    return false;
-  };
   return (
     <div className="flex flex-col items-center gap-y-3 rounded-lg shadow-md border-2 border-violet-700 p-5">
-      <h3 className="text-violet-700 font-semibold">
-        Find Available Appointments
-      </h3>
+      <h3 className="text-violet-700 font-semibold">Select a Date:</h3>
       <AppointmentCalendar date={appointmentSearch.date} setDate={selectDate} />
-      <Button
-        className={`p-6 bg-indigo-500 hover:bg-indigo-600 ${
-          determineDisable() && "opacity-30 pointer-events-none"
-        }`}
-        onClick={fetchAvailableAppointments}
-      >
-        {determineButtonText()}
-      </Button>
     </div>
   );
 };

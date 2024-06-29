@@ -1,23 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import React from "react";
-import { HasAppointmentWithLocations } from "./FindAppointments";
+import {
+  HasAppointmentSearch,
+  HasAppointmentWithLocations,
+} from "./FindAppointments";
+import UpcomingAppointmentSkeletons from "./UpcomingAppointmentSkeletons";
+import Loading from "../loading";
 interface AvailableAppointmentResultsProps {
   availableAppointments: HasAppointmentWithLocations[];
-  resultsMessage: string;
   handleSelectAppointment: (appointment: HasAppointmentWithLocations) => any;
+  isLoading: boolean;
+  appointmentSearch: HasAppointmentSearch;
 }
 const AvailableAppointmentResults = ({
   availableAppointments,
-  resultsMessage,
   handleSelectAppointment,
+  isLoading,
+  appointmentSearch,
 }: AvailableAppointmentResultsProps) => {
+  if (isLoading) {
+    return <Loading />;
+  }
   if (availableAppointments.length > 0) {
     return (
       <div className="flex flex-col w-full lg:w-5/6 p-5 border-indigo-600 border-2 rounded-lg items-center justify-center gap-y-3">
         <h1>
-          <span className="font-bold text-indigo-500">{`${availableAppointments[0].providers.firstName}
-         ${availableAppointments[0].providers.lastName}'s `}</span>
+          <span className="font-bold text-indigo-500">{`${availableAppointments?.[0]?.providers.firstName}
+           ${availableAppointments?.[0]?.providers.lastName}'s `}</span>
           {`upcoming appointments`}
         </h1>
         {availableAppointments.map((appointment, idx) => {
@@ -49,10 +59,14 @@ const AvailableAppointmentResults = ({
             </Card>
           );
         })}
+        )
       </div>
     );
-  } else {
-    return <p>{resultsMessage}</p>;
+  } else if (
+    availableAppointments.length === 0 &&
+    appointmentSearch.providerId
+  ) {
+    return <p>No Results</p>;
   }
 };
 
