@@ -5,7 +5,6 @@ import {
   HasAppointmentSearch,
   HasAppointmentWithLocations,
 } from "./FindAppointments";
-import UpcomingAppointmentSkeletons from "./UpcomingAppointmentSkeletons";
 import Loading from "../loading";
 interface AvailableAppointmentResultsProps {
   availableAppointments: HasAppointmentWithLocations[];
@@ -59,7 +58,6 @@ const AvailableAppointmentResults = ({
             </Card>
           );
         })}
-        )
       </div>
     );
   } else if (

@@ -1,22 +1,15 @@
-import React from "react";
-import { getOustandingPaymentsActions } from "./invoices/[id]/_actions/getOustandingPayments-actions";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import React, { Suspense } from "react";
 import AnimateTitleLeftToRight from "@/animations/AnimateTitleLeftToRight";
-import PendingPayments from "./_components/PendingPayments";
-import PaymentHistory from "./_components/PaymentHistory";
+import PaymentInformation from "./_components/PaymentInformation";
+import ContentLoadingSpinner from "@/animations/ContentLoadingSpinner";
 
-const BillingPage = async () => {
-  const session = await getServerSession(authOptions);
-  const invoiceBillingDetails = await getOustandingPaymentsActions(
-    session?.user.id ?? ""
-  );
-
+const BillingPage = () => {
   return (
     <>
       <AnimateTitleLeftToRight>Billing</AnimateTitleLeftToRight>
-      <PendingPayments invoiceBillingDetails={invoiceBillingDetails} />
-      <PaymentHistory invoiceBillingDetails={invoiceBillingDetails} />
+      <Suspense fallback={<ContentLoadingSpinner text="Loading Balance" />}>
+        <PaymentInformation />
+      </Suspense>
     </>
   );
 };
