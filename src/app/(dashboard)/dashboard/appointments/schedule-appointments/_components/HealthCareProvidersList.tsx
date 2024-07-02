@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, Suspense, useState } from "react";
 import { getProviders } from "../../_actions/getProviders-actions";
 import { useQuery } from "@tanstack/react-query";
 import { HasAppointmentSearch } from "./FindAppointments";
@@ -14,16 +14,17 @@ const HealthCareProvidersList = ({
   appointmentSearch,
   setAppointmentSearch,
 }: HealthCareProvidersListProps) => {
-  const { data: healthcareProviders } = useQuery({
-    queryKey: ["healthcareProviders"],
-    queryFn: getProviders,
-    staleTime: 60 * 60 * 1000,
-  });
+  const { data: healthcareProviders, isFetching: isFetchingHealcareProviders } =
+    useQuery({
+      queryKey: ["healthcareProviders"],
+      queryFn: getProviders,
+      staleTime: 60 * 60 * 1000,
+    });
   return (
     <>
-      <div className="flex flex-col items-center  gap-3 border-2 p-3 rounded-lg border-violet-300">
+      <div className="flex flex-col items-center h-[500px]  gap-3 border-2 p-3 rounded-lg border-violet-300 overflow-auto">
         <h1 className="font-bold text-lg">Select a Provider:</h1>
-        <ScrollArea className="flex flex-col w-56  gap-2 p-3">
+        <ScrollArea className="flex flex-col w-56 gap-2 p-3">
           {healthcareProviders?.map((provider) => (
             <div
               key={provider.id}

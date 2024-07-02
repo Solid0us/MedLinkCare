@@ -1,85 +1,57 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Prisma } from "@prisma/client";
-import {
-  Elements,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { FormEvent } from "react";
-import CheckoutLineItemsTable from "../../_components/CheckoutLineItemsTable";
+import StripeCheckoutSession from "../../_components/StripeCheckoutSession";
+import Stripe from "stripe";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { prisma } from "@/db/prisma";
 
-interface CheckoutFormProps {
-  invoice: Prisma.AppointmentInvoicesGetPayload<{
+const stripe = new Stripe(`${process.env.NEXT_STRIPE_SECRET_KEY}`, {
+  typescript: true,
+  apiVersion: "2024-04-10",
+});
+
+const CheckoutForm = async ({ params }: { params: { id: string } }) => {
+  const session = await getServerSession(authOptions);
+  const invoice = await prisma.appointmentInvoices.findUnique({
+    where: {
+      id: params.id,
+    },
     include: {
       appointmentInvoiceDetails: {
         include: {
-          appointmentReasons: true;
-        };
-      };
-    };
-  }>;
-  clientSecret: string;
-}
-
-const stripePromise = loadStripe(
-  `${process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY}`
-);
-
-const CheckoutForm = ({ invoice, clientSecret }: CheckoutFormProps) => {
+          appointmentReasons: true,
+        },
+      },
+    },
+  });
+  if (!invoice) {
+    return <div>Invoice Not Found</div>;
+  }
+  const stripeSession = await stripe.checkout.sessions.create({
+    customer_email: session?.user.email ?? undefined,
+    ui_mode: "embedded",
+    payment_method_types: ["card"],
+    metadata: {
+      invoices: invoice.id,
+    },
+    line_items: [
+      {
+        price_data: {
+          product: invoice.appointmentInvoiceDetails[0].appointmentReasonsId,
+          currency: "usd",
+          unit_amount: Number(
+            invoice.appointmentInvoiceDetails[0].lineTotalInCents
+          ),
+        },
+        quantity: invoice.appointmentInvoiceDetails[0].quantity,
+      },
+    ],
+    mode: "payment",
+    return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/billing/invoices/${params.id}/success`,
+  });
   return (
     <div className="flex flex-col gap-5">
-      <CheckoutLineItemsTable invoices={[invoice]} />
-      <Elements options={{ clientSecret }} stripe={stripePromise}>
-        <Form id={invoice.id} />
-      </Elements>
+      <StripeCheckoutSession clientSecret={stripeSession.client_secret ?? ""} />
     </div>
-  );
-};
-
-const Form = ({ id }: { id: string }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (stripe && elements) {
-      stripe
-        .confirmPayment({
-          elements,
-          confirmParams: {
-            return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/billing/invoices/${id}/success`,
-          },
-        })
-        .then(({ error }) => {
-          console.log(error);
-        });
-    }
-  };
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Checkout</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <PaymentElement />
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full">Pay now</Button>
-          </CardFooter>
-        </Card>
-      </form>
-    </>
   );
 };
 
