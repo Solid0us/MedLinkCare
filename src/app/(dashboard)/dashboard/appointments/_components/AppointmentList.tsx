@@ -5,8 +5,9 @@ import { Appointment, Users } from "@/interfaces/db_interfaces";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import InfoIcon from "@mui/icons-material/Info";
+import CancelButton from "./CancelButton";
 
-interface HasAppointmentsAndUsers extends Appointment {
+export interface HasAppointmentsAndUsers extends Appointment {
   providers: Users;
 }
 const getAppointments = async (id: string) => {
@@ -53,9 +54,7 @@ const AppointmentList = async () => {
                 </div>
                 <div className="flex flex-col items-center gap-3 p-2">
                   <Button>Reschedule</Button>
-                  <Button className="bg-gray-400 hover:bg-gray-500">
-                    Cancel
-                  </Button>
+                  <CancelButton appointment={appointment} />
                 </div>
               </CardContent>
             </Card>
