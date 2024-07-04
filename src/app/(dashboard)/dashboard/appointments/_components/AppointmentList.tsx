@@ -1,26 +1,19 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Appointment, Users } from "@/interfaces/db_interfaces";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import InfoIcon from "@mui/icons-material/Info";
 import CancelButton from "./CancelButton";
+import getUserAppointments from "../_actions/getUserAppointments-actions";
 
 export interface HasAppointmentsAndUsers extends Appointment {
   providers: Users;
 }
-const getAppointments = async (id: string) => {
-  const res = await fetch(
-    `${process.env.NEXT_BASE_URL}/api/appointments?clientId=${id}&providers=true&start-date-order=asc`
-  );
-  const data: HasAppointmentsAndUsers[] = (await res.json()).data;
-  return data;
-};
 
 const AppointmentList = async () => {
   const session = await getServerSession(authOptions);
-  const appointments = await getAppointments(session?.user.id ?? "");
+  const appointments = await getUserAppointments();
+
   if (appointments.length > 0) {
     return (
       <div className="flex flex-col gap-y-5">
@@ -43,17 +36,21 @@ const AppointmentList = async () => {
                     {appointment.providers.firstName}{" "}
                     {appointment.providers.lastName}
                   </p>
+                  <p>
+                    <span className="font-bold text-violet-700">
+                      Appointment Reason:{" "}
+                    </span>
+                    {appointment.appointmentReasons?.reason}
+                  </p>
+                  <p>
+                    <span className="font-bold text-violet-700">
+                      Location:{" "}
+                    </span>
+                    {appointment.locations.address}
+                  </p>
                 </div>
-                <div>
-                  <Link
-                    className="underline hover:text-violet-500"
-                    href={`/dashboard/appointments/${appointment.id}`}
-                  >
-                    View Details
-                  </Link>
-                </div>
+
                 <div className="flex flex-col items-center gap-3 p-2">
-                  <Button>Reschedule</Button>
                   <CancelButton appointment={appointment} />
                 </div>
               </CardContent>
