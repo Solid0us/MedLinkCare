@@ -6,7 +6,11 @@ import { Prisma } from "@prisma/client";
 export type InvoicesWithPaymentsAndDetails =
   Prisma.AppointmentInvoicesGetPayload<{
     include: {
-      appointmentPayments: true;
+      appointmentPayments: {
+        include: {
+          refunds: true;
+        };
+      };
       appointmentInvoiceDetails: {
         include: {
           appointmentReasons: true;
@@ -24,7 +28,11 @@ export const getOustandingPaymentsActions = async (
 }> => {
   const invoices = await prisma.appointmentInvoices.findMany({
     include: {
-      appointmentPayments: true,
+      appointmentPayments: {
+        include: {
+          refunds: true,
+        },
+      },
       appointmentInvoiceDetails: {
         include: {
           appointmentReasons: true,
