@@ -33,6 +33,7 @@ export const getOustandingPaymentsActions = async (
     },
     where: {
       usersId: userId,
+      active: true,
     },
     orderBy: {
       invoiceDate: "asc",

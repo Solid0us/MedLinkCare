@@ -56,7 +56,7 @@ model Appointments {
   appointmentReasonsId String?
   locations Locations @relation(fields: [locationsId], references: [id])
   locationsId String
-  
+  appointmentInvoiceDetails AppointmentInvoiceDetails[]
   @@unique([startDate, endDate, providersId], map: "uniqueAppointmentCompositeKey")
 }
 
@@ -81,6 +81,7 @@ model AppointmentInvoices {
   dueDate DateTime
   users Users @relation(fields: [usersId], references:[id])
   usersId String
+  active Boolean @default(true)
   appointmentInvoiceDetails AppointmentInvoiceDetails[]
   appointmentPayments AppointmentPayments[]
 }
@@ -93,6 +94,8 @@ model AppointmentInvoiceDetails {
   appointmentInvoiceId String
   appointmentReasons AppointmentReasons @relation(fields: [appointmentReasonsId], references: [id])
   appointmentReasonsId String
+  appointments Appointments @relation(fields: [appointmentId], references: [id])
+  appointmentId String
 }
 
 model AppointmentPayments {

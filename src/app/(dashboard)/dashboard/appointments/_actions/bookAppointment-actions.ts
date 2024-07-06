@@ -46,6 +46,7 @@ export const bookAppointments = async (formData: BookAppointmentForm) => {
               quantity: 1,
               appointmentReasonsId: appointmentReason.id,
               lineTotalInCents: appointmentReason.priceInCents,
+              appointmentId: formData.appointmentId,
             },
           },
         },
