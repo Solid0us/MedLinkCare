@@ -34,6 +34,27 @@ interface PaymentHistoryProps {
 const PaymentHistory = ({ invoiceBillingDetails }: PaymentHistoryProps) => {
   const { paidInvoices } = invoiceBillingDetails;
   const tableHeaders = ["Invoice ID", "Payment Date", "Amount Paid", "Details"];
+
+  const determinePaidOrRefund = (invoice: InvoicesWithPaymentsAndDetails) => {
+    if (invoice.appointmentPayments[0].refunds.length > 0) {
+      return (
+        <span className="text-green-500">
+          +
+          {convertCentsToUSD(
+            invoice.appointmentInvoiceDetails[0].lineTotalInCents
+          )}
+        </span>
+      );
+    }
+    return (
+      <span className="text-red-400">
+        -
+        {convertCentsToUSD(
+          invoice.appointmentInvoiceDetails[0].lineTotalInCents
+        )}
+      </span>
+    );
+  };
   return (
     <Accordion type="single" collapsible>
       <AccordionItem
@@ -71,11 +92,7 @@ const PaymentHistory = ({ invoiceBillingDetails }: PaymentHistoryProps) => {
                           invoice.appointmentPayments[0].transactionDate
                         ).toLocaleString()}
                       </TableCell>
-                      <TableCell>
-                        {convertCentsToUSD(
-                          invoice.appointmentInvoiceDetails[0].lineTotalInCents
-                        )}
-                      </TableCell>
+                      <TableCell>{determinePaidOrRefund(invoice)}</TableCell>
                       <TableCell>
                         <Popover>
                           <PopoverTrigger className="p-3 bg-gray-500 text-white rounded-lg">

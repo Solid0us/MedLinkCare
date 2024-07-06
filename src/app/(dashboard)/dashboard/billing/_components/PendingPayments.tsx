@@ -41,7 +41,7 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
               {convertCentsToUSD(totalDueInCents)}
             </p>
           </div>
-          {unpaidInvoices.length > 0 && (
+          {unpaidInvoices.filter((invoice) => invoice.active).length > 0 && (
             <Link href="/dashboard/billing/invoices">
               <Button>Pay All Pending Invoices</Button>
             </Link>
@@ -50,60 +50,63 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
       </CardHeader>
       <Separator className="bg-indigo-500 mb-5" />
       <CardContent className="flex flex-col gap-y-5">
-        {unpaidInvoices.length === 0 ? (
+        {unpaidInvoices.filter((invoice) => invoice.active).length === 0 ? (
           <p>No pending payments</p>
         ) : (
           <>
-            {unpaidInvoices.map((invoice) => (
-              <>
-                {
-                  <Card
-                    key={invoice.id}
-                    className="p-2 border-indigo-300 border-2"
-                  >
-                    <CardHeader>
-                      <CardTitle> Invoice ID: {invoice.id}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-col lg:flex-row justify-between">
-                        <div>
-                          <p>
-                            Invoice Date:{" "}
-                            {new Date(invoice.invoiceDate).toLocaleString()}
-                          </p>
-                          <p>
-                            Due Date:{" "}
-                            {new Date(invoice.dueDate).toLocaleString()} (
-                            {determineDaysRemainingText(invoice.dueDate)})
-                          </p>
-                        </div>
-                        <Link
-                          href={`/dashboard/billing/invoices/${invoice.id}`}
-                        >
-                          <Button>Pay now</Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      {invoice.appointmentInvoiceDetails.map((detail) => (
-                        <ol key={detail.id} className="list-disc ml-8">
-                          <li>
-                            {`${
-                              detail.appointmentReasons.reason
-                            } - ${convertCentsToUSD(
-                              detail.appointmentReasons.priceInCents
-                            )}`}
-                            <p className="text-slate-400 text-sm">
-                              {detail.appointmentReasons.description}
-                            </p>
-                          </li>
-                        </ol>
-                      ))}
-                    </CardFooter>
-                  </Card>
-                }
-              </>
-            ))}
+            {unpaidInvoices.map(
+              (invoice) =>
+                invoice.active && (
+                  <>
+                    {
+                      <Card
+                        key={invoice.id}
+                        className="p-2 border-indigo-300 border-2"
+                      >
+                        <CardHeader>
+                          <CardTitle> Invoice ID: {invoice.id}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex flex-col lg:flex-row justify-between">
+                            <div>
+                              <p>
+                                Invoice Date:{" "}
+                                {new Date(invoice.invoiceDate).toLocaleString()}
+                              </p>
+                              <p>
+                                Due Date:{" "}
+                                {new Date(invoice.dueDate).toLocaleString()} (
+                                {determineDaysRemainingText(invoice.dueDate)})
+                              </p>
+                            </div>
+                            <Link
+                              href={`/dashboard/billing/invoices/${invoice.id}`}
+                            >
+                              <Button>Pay now</Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                        <CardFooter>
+                          {invoice.appointmentInvoiceDetails.map((detail) => (
+                            <ol key={detail.id} className="list-disc ml-8">
+                              <li>
+                                {`${
+                                  detail.appointmentReasons.reason
+                                } - ${convertCentsToUSD(
+                                  detail.appointmentReasons.priceInCents
+                                )}`}
+                                <p className="text-slate-400 text-sm">
+                                  {detail.appointmentReasons.description}
+                                </p>
+                              </li>
+                            </ol>
+                          ))}
+                        </CardFooter>
+                      </Card>
+                    }
+                  </>
+                )
+            )}
           </>
         )}
       </CardContent>

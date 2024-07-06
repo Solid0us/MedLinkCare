@@ -6,7 +6,11 @@ import { Prisma } from "@prisma/client";
 export type InvoicesWithPaymentsAndDetails =
   Prisma.AppointmentInvoicesGetPayload<{
     include: {
-      appointmentPayments: true;
+      appointmentPayments: {
+        include: {
+          refunds: true;
+        };
+      };
       appointmentInvoiceDetails: {
         include: {
           appointmentReasons: true;
@@ -24,7 +28,11 @@ export const getOustandingPaymentsActions = async (
 }> => {
   const invoices = await prisma.appointmentInvoices.findMany({
     include: {
-      appointmentPayments: true,
+      appointmentPayments: {
+        include: {
+          refunds: true,
+        },
+      },
       appointmentInvoiceDetails: {
         include: {
           appointmentReasons: true,
@@ -40,15 +48,17 @@ export const getOustandingPaymentsActions = async (
   });
   let totalDueInCents = 0;
   for (let i = 0; i < invoices.length; i++) {
-    const invoiceTotalInCents = invoices[i].appointmentInvoiceDetails
-      .map((data) => Number(data.lineTotalInCents))
-      .reduce((prev, curr) => prev + curr, 0);
+    if (invoices[i].active) {
+      const invoiceTotalInCents = invoices[i].appointmentInvoiceDetails
+        .map((data) => Number(data.lineTotalInCents))
+        .reduce((prev, curr) => prev + curr, 0);
 
-    const totalPaid = invoices[i].appointmentPayments
-      .map((data) => Number(data.amountPaidInCents))
-      .reduce((prev, curr) => prev + curr, 0);
-    const amountLeft = invoiceTotalInCents - totalPaid;
-    totalDueInCents += amountLeft;
+      const totalPaid = invoices[i].appointmentPayments
+        .map((data) => Number(data.amountPaidInCents))
+        .reduce((prev, curr) => prev + curr, 0);
+      const amountLeft = invoiceTotalInCents - totalPaid;
+      totalDueInCents += amountLeft;
+    }
   }
   return {
     totalDueInCents,
