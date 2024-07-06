@@ -58,22 +58,22 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       }
     }
     if (event.type === "payment_intent.succeeded") {
-      const { amount, metadata } = event.data.object;
+      const { amount, metadata, id } = event.data.object;
       if (metadata.invoiceId) {
         await prisma.appointmentPayments.create({
           data: {
             amountPaidInCents: amount,
             appointmentInvoiceId: metadata.invoiceId,
+            stripePaymentIntentId: id,
           },
         });
       }
     }
     if (event.type === "checkout.session.completed") {
-      const { id } = event.data.object;
+      const { id, payment_intent } = event.data.object;
       const { data: lineItems } = await stripe.checkout.sessions.listLineItems(
         id
       );
-      console.log(lineItems);
       const invoiceIds = String(event.data.object.metadata?.invoices).split(
         ","
       );
@@ -101,6 +101,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
             amountPaidInCents: BigInt(productItem.amount_total),
             transactionDate: new Date(),
             id: crypto.randomUUID(),
+            stripePaymentIntentId: String(payment_intent),
           });
         }
       });
@@ -111,6 +112,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     }
     return NextResponse.json({ status: "success", event: event.type });
   } catch (err) {
+    console.log(err);
     return NextResponse.json({ status: "Failed", err });
   }
 };

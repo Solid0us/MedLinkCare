@@ -9,6 +9,9 @@ const getUserAppointments = async () => {
     const appointments = await prisma.appointments.findMany({
       where: {
         clientsId: session.user.id,
+        startDate: {
+          gte: new Date(),
+        },
       },
       include: {
         providers: true,
