@@ -41,7 +41,7 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
               {convertCentsToUSD(totalDueInCents)}
             </p>
           </div>
-          {unpaidInvoices.length > 0 && (
+          {unpaidInvoices.filter((invoice) => invoice.active).length > 0 && (
             <Link href="/dashboard/billing/invoices">
               <Button>Pay All Pending Invoices</Button>
             </Link>
@@ -50,7 +50,7 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
       </CardHeader>
       <Separator className="bg-indigo-500 mb-5" />
       <CardContent className="flex flex-col gap-y-5">
-        {unpaidInvoices.length === 0 ? (
+        {unpaidInvoices.filter((invoice) => invoice.active).length === 0 ? (
           <p>No pending payments</p>
         ) : (
           <>
