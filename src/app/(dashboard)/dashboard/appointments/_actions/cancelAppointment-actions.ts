@@ -4,11 +4,17 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { prisma } from "@/db/prisma";
 import { Prisma } from "@prisma/client";
+import Stripe from "stripe";
+
+const stripe = new Stripe(`${process.env.NEXT_STRIPE_SECRET_KEY}`, {
+  typescript: true,
+  apiVersion: "2024-04-10",
+});
 
 export const cancelAppointment = async (appointmentId: string) => {
   const session = await getServerSession(authOptions);
   if (session) {
-    const invoices = await prisma.appointmentInvoices.findFirst({
+    const invoice = await prisma.appointmentInvoices.findFirst({
       where: {
         appointmentInvoiceDetails: {
           some: {
@@ -21,14 +27,22 @@ export const cancelAppointment = async (appointmentId: string) => {
         appointmentPayments: true,
       },
     });
-    if (invoices) {
-      if (invoices.appointmentPayments.length > 0) {
-        // Perform refund logic here
+    if (invoice) {
+      if (invoice.appointmentPayments.length > 0) {
+        try {
+          await stripe.refunds.create({
+            payment_intent:
+              invoice.appointmentPayments[0].stripePaymentIntentId,
+            amount: Number(invoice.appointmentPayments[0].amountPaidInCents),
+          });
+        } catch (err) {
+          throw new Error("Unable to refund appointment.");
+        }
       }
       await prisma.$transaction([
         prisma.appointmentInvoices.update({
           where: {
-            id: invoices.id,
+            id: invoice.id,
           },
           data: {
             active: false,
