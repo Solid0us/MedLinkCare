@@ -110,6 +110,33 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         data: appointmentPaymentsPayload,
       });
     }
+
+    if (event.type === "charge.refund.updated") {
+      const { amount, id, created, metadata } = event.data.object;
+      if (metadata?.appointmentPaymentId) {
+        try {
+          await prisma.refunds.upsert({
+            create: {
+              id,
+              refundDate: new Date(created),
+              appointmentPaymentId: metadata.appointmentPaymentId,
+              amountInCents: amount,
+            },
+            update: {
+              refundDate: new Date(created),
+              appointmentPaymentId: metadata.appointmentPaymentId,
+              amountInCents: amount,
+            },
+            where: {
+              id,
+            },
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+
     return NextResponse.json({ status: "success", event: event.type });
   } catch (err) {
     console.log(err);

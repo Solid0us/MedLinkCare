@@ -21,6 +21,7 @@ export const cancelAppointment = async (appointmentId: string) => {
             appointmentId,
           },
         },
+        active: true,
       },
       include: {
         appointmentInvoiceDetails: true,
@@ -30,12 +31,17 @@ export const cancelAppointment = async (appointmentId: string) => {
     if (invoice) {
       if (invoice.appointmentPayments.length > 0) {
         try {
+          console.log(invoice.appointmentPayments);
           await stripe.refunds.create({
             payment_intent:
               invoice.appointmentPayments[0].stripePaymentIntentId,
             amount: Number(invoice.appointmentPayments[0].amountPaidInCents),
+            metadata: {
+              appointmentPaymentId: invoice.appointmentPayments[0].id,
+            },
           });
         } catch (err) {
+          console.log(err);
           throw new Error("Unable to refund appointment.");
         }
       }

@@ -33,7 +33,6 @@ export const getOustandingPaymentsActions = async (
     },
     where: {
       usersId: userId,
-      active: true,
     },
     orderBy: {
       invoiceDate: "asc",
@@ -41,15 +40,17 @@ export const getOustandingPaymentsActions = async (
   });
   let totalDueInCents = 0;
   for (let i = 0; i < invoices.length; i++) {
-    const invoiceTotalInCents = invoices[i].appointmentInvoiceDetails
-      .map((data) => Number(data.lineTotalInCents))
-      .reduce((prev, curr) => prev + curr, 0);
+    if (invoices[i].active) {
+      const invoiceTotalInCents = invoices[i].appointmentInvoiceDetails
+        .map((data) => Number(data.lineTotalInCents))
+        .reduce((prev, curr) => prev + curr, 0);
 
-    const totalPaid = invoices[i].appointmentPayments
-      .map((data) => Number(data.amountPaidInCents))
-      .reduce((prev, curr) => prev + curr, 0);
-    const amountLeft = invoiceTotalInCents - totalPaid;
-    totalDueInCents += amountLeft;
+      const totalPaid = invoices[i].appointmentPayments
+        .map((data) => Number(data.amountPaidInCents))
+        .reduce((prev, curr) => prev + curr, 0);
+      const amountLeft = invoiceTotalInCents - totalPaid;
+      totalDueInCents += amountLeft;
+    }
   }
   return {
     totalDueInCents,
