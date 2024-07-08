@@ -9,6 +9,8 @@ import {
 import React, { SetStateAction } from "react";
 import { HasInbox } from "../page";
 import { markAsRead } from "../_actions/markAsRead-actions";
+import { Prisma } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 interface InboxListProps {
   selectedInbox: string;
@@ -20,9 +22,39 @@ const InboxList = ({
   selectedInbox,
   setSelectedInbox,
 }: InboxListProps) => {
+  const { data: session } = useSession();
   const handleSelectInbox = (userId: string) => {
     setSelectedInbox(userId);
     markAsRead(userId);
+  };
+
+  const countUnread = (
+    messages: Prisma.MessagesGetPayload<{
+      include: { receiver: true; sender: true };
+    }>[]
+  ) => {
+    let unRead = 0;
+    for (let i = 0; i < messages.length; i++) {
+      if (!messages[i].isRead && messages[i].receiverId === session?.user.id) {
+        unRead++;
+      }
+    }
+    return unRead;
+  };
+
+  const determineUnreadText = (
+    messages: Prisma.MessagesGetPayload<{
+      include: { receiver: true; sender: true };
+    }>[]
+  ) => {
+    let numberUnread = countUnread(messages);
+    if (numberUnread > 0) {
+      return (
+        <div className="flex flex-row justify-center items-center rounded-full w-6 h-6 bg-purple-500 text-center text-sm text-white">
+          {numberUnread}
+        </div>
+      );
+    }
   };
 
   return (
@@ -36,7 +68,9 @@ const InboxList = ({
           }`}
         >
           <CardHeader>
-            <CardTitle>{inbox[key].name}</CardTitle>
+            <CardTitle>
+              {inbox[key].name} {determineUnreadText(inbox[key].messages)}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription>

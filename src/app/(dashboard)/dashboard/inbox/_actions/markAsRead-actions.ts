@@ -3,6 +3,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { prisma } from "@/db/prisma";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export const markAsRead = async (senderId: string) => {
   const session = await getServerSession(authOptions);
@@ -22,4 +23,5 @@ export const markAsRead = async (senderId: string) => {
       console.log(err);
     }
   }
+  revalidatePath("/dashboard/inbox");
 };
