@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import React, { SetStateAction } from "react";
 import { HasInbox } from "../page";
+import { markAsRead } from "../_actions/markAsRead-actions";
 
 interface InboxListProps {
   selectedInbox: string;
@@ -21,6 +22,7 @@ const InboxList = ({
 }: InboxListProps) => {
   const handleSelectInbox = (userId: string) => {
     setSelectedInbox(userId);
+    markAsRead(userId);
   };
 
   return (
