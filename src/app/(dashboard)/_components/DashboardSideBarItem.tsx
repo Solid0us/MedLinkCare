@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import EventNoteIcon from "@mui/icons-material/EventNote";
@@ -8,13 +9,33 @@ interface DashboardSideBarItemProps {
   expand: boolean;
   label: string;
   href: string;
+  unreadMessages?: any[];
 }
 
 const DashboardSideBarItem = ({
   expand,
   label,
   href,
+  unreadMessages,
 }: DashboardSideBarItemProps) => {
+  const determineUnreadEmailRender = () => {
+    if (unreadMessages) {
+      if (unreadMessages.length > 0) {
+        return (
+          <div
+            className={`${
+              expand ? "visible" : "invisible md:visible"
+            } float-start -translate-y-2 translate-x-4 h-0 w-0`}
+          >
+            <p className="bg-rose-300 w-5 h-5 rounded-full text-center flex justify-center items-center">
+              {unreadMessages.length}
+            </p>
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <Link
       href={href}
@@ -34,9 +55,12 @@ const DashboardSideBarItem = ({
           />
         )}{" "}
         {label === "Inbox" && (
-          <EmailIcon
-            className={`${expand ? "visible" : "invisible md:visible"}`}
-          />
+          <>
+            <EmailIcon
+              className={`${expand ? "visible" : "invisible md:visible"}`}
+            />
+            {determineUnreadEmailRender()}
+          </>
         )}
         {label === "Payments" && (
           <PaymentIcon

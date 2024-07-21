@@ -8,11 +8,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 interface DashboardSideBarProps {
   children: any;
+  unreadMessages: any[];
 }
 
-const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
+const DashboardSideBar = ({
+  children,
+  unreadMessages,
+}: DashboardSideBarProps) => {
   const [expand, setExpand] = useState(false);
-
   return (
     <>
       <div
@@ -57,13 +60,13 @@ const DashboardSideBar = ({ children }: DashboardSideBarProps) => {
           href="/dashboard/inbox"
           label="Inbox"
           expand={expand}
+          unreadMessages={unreadMessages}
         />
         <DashboardSideBarItem
           href="/dashboard/billing"
           label="Payments"
           expand={expand}
         />
-
         <DashboardLogoutButton expand={expand} />
       </div>
       <div

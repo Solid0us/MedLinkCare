@@ -9,7 +9,7 @@ export const markAsRead = async (senderId: string) => {
   const session = await getServerSession(authOptions);
   if (session?.user) {
     try {
-      await prisma.messages.updateMany({
+      const updated = await prisma.messages.updateMany({
         where: {
           receiverId: session.user.id,
           senderId: senderId,
@@ -19,9 +19,11 @@ export const markAsRead = async (senderId: string) => {
           isRead: true,
         },
       });
+      if (updated.count > 0) {
+        revalidatePath("/dashboard/inbox");
+      }
     } catch (err) {
       console.log(err);
     }
   }
-  revalidatePath("/dashboard/inbox");
 };
