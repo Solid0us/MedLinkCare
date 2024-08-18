@@ -58,7 +58,7 @@ const InboxList = ({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-5">
       {Object.keys(inbox).map((key) => (
         <Card
           onClick={() => handleSelectInbox(key)}

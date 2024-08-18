@@ -14,6 +14,12 @@ export const GET = async (req: NextRequest) => {
         email: true,
       },
     },
+    appointmentReasons: {
+      select: {
+        description: true,
+        reason: true,
+      },
+    },
   };
   let orderByOptions: Prisma.AppointmentsOrderByWithRelationInput = {};
   req.nextUrl.searchParams.get("start-date-order") === "asc" &&

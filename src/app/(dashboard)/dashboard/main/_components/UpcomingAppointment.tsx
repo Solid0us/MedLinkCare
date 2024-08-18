@@ -1,10 +1,15 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { Appointment, Users } from "@/interfaces/db_interfaces";
+import {
+  Appointment,
+  AppointmentReasons,
+  Users,
+} from "@/interfaces/db_interfaces";
 
 interface HasAppointmentsAndUsers extends Appointment {
   providers: Users;
+  appointmentReasons: AppointmentReasons;
 }
 
 const getAppointments = async (id: string) => {
@@ -23,17 +28,27 @@ const UpcomingAppointment = async () => {
     <>
       {appointments.length > 0 ? (
         <>
-          <p>Next Appointment:</p>
-          <ul className="list-disc p-3">
-            <li>
-              Start: {new Date(appointments[0].startDate).toLocaleString()}
-            </li>
-            <li>End: {new Date(appointments[0].endDate).toLocaleString()}</li>
-            <li>
-              {appointments[0].providers.firstName}{" "}
-              {appointments[0].providers.lastName}
-            </li>
-          </ul>
+          <div className="flex flex-col gap-y-5">
+            <p>
+              Your next appointment is scheduled with
+              <span className="font-bold">
+                {` ${appointments[0].providers.firstName} ${appointments[0].providers.lastName}`}
+              </span>
+            </p>
+            <div className="p-3 border border-indigo-200 rounded-lg flex flex-col gap-y-5">
+              <p>
+                <b>Start Date: </b>
+                {new Date(appointments[0].startDate).toLocaleString()}
+              </p>
+              <p>
+                <b>End Date: </b>{" "}
+                {new Date(appointments[0].endDate).toLocaleString()}
+              </p>
+              <p>
+                <b>Reason: </b> {appointments[0].appointmentReasons.reason}
+              </p>
+            </div>
+          </div>
         </>
       ) : (
         <>

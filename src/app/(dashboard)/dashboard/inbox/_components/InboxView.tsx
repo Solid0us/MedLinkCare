@@ -17,8 +17,8 @@ const InboxView = ({ inbox }: InboxViewProps) => {
   const [selectedInbox, setSelectedInbox] = useState<string>("");
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-x-10 gap-y-5">
-        <div className="hidden  lg:flex lg:flex-col lg:items-center lg:gap-5">
+      <div className="flex flex-col lg:flex-row gap-x-10 gap-y-5 h-screen">
+        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-5 border h-full p-3 border-purple-400 rounded-lg">
           <StartNewConversation
             inbox={inbox}
             setSelectedInbox={setSelectedInbox}
