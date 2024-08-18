@@ -47,7 +47,14 @@ const SignIn = () => {
           onChange={(e) => (password.current = e.target.value)}
         />
         <SubmitButton onClick={onSubmit} text="Log in"></SubmitButton>
-        <p className="text-sm text-center pt-5 pb-5">
+        <p className="text-sm text-center">
+          Trial account:
+          <br />
+          Email: <b>jdoe@gmail.com</b>
+          <br />
+          Password: <b>password123</b>
+        </p>
+        <p className="text-sm text-center">
           Don&apos;t have an account?
           <Link href="/auth/signup">
             <span className="text-violet-800 font-bold"> Sign up here.</span>
@@ -58,11 +65,3 @@ const SignIn = () => {
   );
 };
 export default SignIn;
-
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//   return {
-//     props: {
-//       csrfToken: await getCsrfToken(context),
-//     },
-//   };
-// }

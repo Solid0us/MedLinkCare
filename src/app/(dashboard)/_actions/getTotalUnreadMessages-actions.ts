@@ -11,6 +11,15 @@ const getTotalUnreadMessages = async () => {
         receiverId: session?.user.id,
         isRead: false,
       },
+      include: {
+        sender: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
     });
     return unread;
   }

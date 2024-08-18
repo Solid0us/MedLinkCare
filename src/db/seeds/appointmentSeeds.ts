@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { addDays, addMonths, addMinutes, addHours } from "date-fns";
-import { start } from "repl";
 
 const seedAppointments = async () => {
   const healthcareProviders = await prisma.users.findMany({
@@ -24,7 +23,7 @@ const seedAppointments = async () => {
     const today = new Date();
     let startingDate = new Date(
       Date.UTC(
-        today.getUTCFullYear(),
+        today.getUTCFullYear() + 10,
         today.getUTCMonth() + 1,
         today.getUTCDay(),
         14,

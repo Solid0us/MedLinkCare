@@ -25,9 +25,11 @@ const PendingPayments = ({ invoiceBillingDetails }: PendingPaymentsProps) => {
   const determineDaysRemainingText = (dueDate: Date) => {
     const days = calculateDaysRemaining(new Date(), dueDate);
     if (days >= 0) {
-      return `${days} days remaining`;
+      return <span>{`${days} days remaining`}</span>;
     } else {
-      return "PAYMENT PAST DUE";
+      return (
+        <span className="text-red-400 font-bold">{`PAYMENT PAST DUE`}</span>
+      );
     }
   };
   return (
