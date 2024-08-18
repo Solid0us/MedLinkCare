@@ -116,6 +116,7 @@ model Messages {
   senderId String
   receiver Users @relation("receiverMessage",fields: [receiverId], references: [id])
   receiverId String
+  isRead Boolean @default(false)
 }
 
 model Refunds {

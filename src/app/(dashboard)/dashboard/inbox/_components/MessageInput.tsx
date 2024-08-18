@@ -41,7 +41,9 @@ const MessageInput = ({
       />
       <div
         onClick={() => mutateSendMessage()}
-        className="rounded-full hover:bg-violet-200 p-2 h-fit"
+        className={`rounded-full hover:bg-violet-200 p-2 h-fit ${
+          message.trim().length < 1 && "opacity-30 pointer-events-none"
+        }`}
       >
         <SendIcon />
       </div>

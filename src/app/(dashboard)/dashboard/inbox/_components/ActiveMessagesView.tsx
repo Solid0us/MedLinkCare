@@ -16,7 +16,7 @@ const ActiveMessagesView = ({
   const bottomOfMessageBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     bottomOfMessageBoxRef.current?.scrollIntoView({ behavior: "auto" });
-  }, [inbox[selectedInbox]]);
+  }, [inbox[selectedInbox].messages.length]);
   return (
     <>
       <div className="flex flex-col items-center w-full gap-3">

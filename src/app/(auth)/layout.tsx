@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionWrapper>
           <Link href="/" className="mt-auto mb-auto text-2xl">
-            <h1 className=" bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text ">
+            <h1 className="pl-5 pt-3 bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text ">
               MedLink Care
             </h1>
           </Link>
