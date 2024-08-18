@@ -84,7 +84,7 @@ export const signupUser = async (
       fieldValues: {
         confirmPassword,
         password,
-        email,
+        email: email.toLowerCase(),
         firstName,
         lastName,
       },

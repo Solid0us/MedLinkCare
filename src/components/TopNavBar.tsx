@@ -7,9 +7,9 @@ const TopNavBar = () => {
   const { data: session, status } = useSession();
   return (
     <>
-      <div className="top-0 sticky z-50 w-full h-20 flex flex-row bg-violet-300 justify-between">
+      <div className="top-0 sticky z-50 w-full h-20 flex flex-row bg-violet-300 justify-between pl-5 pr-5">
         <Link href="/" className="mt-auto mb-auto text-2xl">
-          <h1 className=" bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text ">
+          <h1 className=" bg-gradient-to-r from-violet-900 to-blue-700 text-transparent bg-clip-text">
             MedLink Care
           </h1>
         </Link>
