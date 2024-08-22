@@ -19,7 +19,7 @@ const DashboardSideBar = ({
   return (
     <>
       <div
-        className="md:invisible absolute top-0 left-0 m-4 hover:bg-violet-200 rounded-lg"
+        className="md:invisible fixed z-50 top-0 left-0 m-4 hover:bg-violet-200 rounded-lg bg-purple-100"
         onClick={() => setExpand((prevState) => !prevState)}
       >
         <MenuIcon fontSize="large" className=" text-violet-600 " />

@@ -17,7 +17,7 @@ const InboxNotification = async () => {
       return `${hoursAgo.toFixed(0)} hour(s)`;
     }
     const daysAgo = hoursAgo / 24;
-    return `${daysAgo.toFixed(0)} hour(s)`;
+    return `${daysAgo.toFixed(0)} day(s)`;
   };
   return (
     <AnimateCardScaleUp>
